@@ -83,10 +83,13 @@ txtP:
   addi $10, $0, 3
   addi $11, $0, 0
 forLateralP:
-  beq $10, $11, end
+  beq $10, $11, retorno
   
   sw $9, 0($8)
   addi $8, $8, 512
   
   addi $11, $11, 1
   j forLateralP
+
+retorno:
+  jr $31

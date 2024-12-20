@@ -1,8 +1,8 @@
 .text
 
-.globl main, end # Exporta as labels para outros arquivos do diretorio
+.globl criarCenario # Exporta as labels para outros arquivos do diretorio
 
-main:
+criarCenario:
   lui $8, 0x1001 # Endereço inicial do cenario
     
   # Criaçao do ceu
@@ -30,7 +30,7 @@ criarChao:
   addi $10, $0, 3072
   addi $11, $0, 0
 forChao:
-  beq $11, $10, criarIndicadorHP
+  beq $11, $10, retorno
   
   sw $9, 0($8)
   addi $8, $8, 4
@@ -38,8 +38,5 @@ forChao:
   addi $11, $11, 1
   j forChao
   
-
-
-end:
-  addi $2, $0, 10
-  syscall
+retorno:
+  jr $31
