@@ -1,11 +1,12 @@
 .text
 .globl telaInicial
 
-.main: j telaInicial
-
-
 # Preenche o fundo
 telaInicial:
+  sw $31, 0($sp) # Armazena na pilha o endereço de retorno do RUN
+  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha
+
+
   lui $8, 0x1001
   ori $9, $0, 0x1E90FF
   
@@ -318,6 +319,7 @@ preencherBotaoJogar:
   
 jal letrasBotaoJogar
   
+  
 botaoSkins:
   ori $9, $0, 0xffffff
   
@@ -404,7 +406,8 @@ forEscolherBotao:
 espacoPressionado:
   bne $22, $0, continue # skins selecionado, ainda falta implementar
   
-  j end # em dev vai finalizar o jogo, porem, na versao de producao retorna pra o run iniciar o jogo
+  addi $3, $0, 1 # 1 = jogar selecionado
+  j retorno
   
   
 wPressionado:
@@ -443,10 +446,10 @@ sPressionado:
 continue:
   j forEscolherBotao
   
-end:
-  addi $2, $0, 10
-  syscall
-  
+retorno:
+  addi $sp, $sp, 4 # recupera o endereço de retorno da funçao na pilha
+  lw $31, 0($sp)
+  jr $31
   
   
   
@@ -464,8 +467,8 @@ end:
 
 preencherBotao:
   sw $31, 0($sp) # Armazena na pilha o endereço de retorno da funcao
-  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha 
-  
+  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha
+
   beq $4, $0, botaoNaoSelecionado
   ori $9, $0, 0xeb984e # botao selecionado
   j preencherBotaoIndex
@@ -528,6 +531,7 @@ escreverLetrasSkins:
   addi $sp, $sp, 4 # recupera o endereço de retorno da funçao na pilha
   lw $31, 0($sp)
   jr $31
+  
   
   
   

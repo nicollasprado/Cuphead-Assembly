@@ -1,7 +1,21 @@
+Gerais:
 $8  = ponteiro para endereço de memoria estática
 $9  = cores
 $10 = Limitadores de loops
 $11 = Somadores de loops
+
+
+Tela inicial:
+$16 = Armazenamento de valores ascii
+$19 = contem o endereço de memoria que será utilizado pelo $20
+$20 = Armazena 1 se tiver entrada do teclado e 0 se não
+$21 = Armazena a tecla que o usuario digitou
+$22 = Botao escolhido -  0 = botao jogar; 1 = botao skins
+$23 = Endereço do inicio do interior do botão de jogar
+$24 = Endereço do inicio do inteiro do botão de skins
+
+
+Cenario:
 $12 = Endereço de inicio do topo do chão (o final é ele + 508)
 $13 = Endereço do inicio do indicador de vida
 

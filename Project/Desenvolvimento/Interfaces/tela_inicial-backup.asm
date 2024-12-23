@@ -199,8 +199,7 @@ letraA:
   addi $8, $25, 44
   add $25, $0, $8
   
-  addi $8, $8, 512
-  addi $10, $0, 10
+  addi $10, $0, 11
   addi $11, $0, 0
 forLetraA:
   beq $10, $11, meioLetraA
@@ -213,8 +212,8 @@ forLetraA:
   j forLetraA
   
 meioLetraA:
-  addi $8, $25, 4
-  addi $10, $0, 5
+  add $8, $0, $25
+  addi $10, $0, 6
   addi $11, $0, 0
 forMeioLetraA:
   beq $10, $11, letraD
@@ -311,12 +310,36 @@ forLateraisBotaoJogar:
   
   
 preencherBotaoJogar:
-  addi $23, $25, 512
-  addi $4, $0, 1
-  addi $5, $0, 0
-  jal preencherBotao
+  ori $9, $0, 0xD2691E
+  addi $8, $25, 512 # recupera o valor do inicio da parte interna do botao
+  add $23, $0, $8   # salva o inicio da parte interna do botao jogar
   
-jal letrasBotaoJogar
+  addi $10, $0, 64
+  addi $11, $0, 0
+  
+  addi $12, $0, 11
+  addi $13, $0, 0
+ 
+forPreencherBotaoJogar:
+  beq $10, $11, nextLine
+  
+  sw $9, 0($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forPreencherBotaoJogar
+  
+# itera as linhas do interior do botao
+nextLine:
+  beq $12, $13, botaoSkins
+  
+  addi $11, $0, 0
+  addi $8, $8, 256 # pula pra proxima linha
+  
+  addi $13, $13, 1
+  j forPreencherBotaoJogar
+  
+  
   
 botaoSkins:
   ori $9, $0, 0xffffff
@@ -368,80 +391,33 @@ preencherBotaoSkins:
   addi $13, $0, 0
  
 forPreencherBotaoSkins:
-  addi $24, $25, 512
-  addi $4, $0, 0
-  addi $5, $0, 1
-  jal preencherBotao
+  beq $10, $11, nextLineBotaoSkins
+  
+  sw $9, 0($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forPreencherBotaoSkins
+  
+# itera as linhas do interior do botao
+nextLineBotaoSkins:
+  beq $12, $13, escolherBotao
+  
+  addi $11, $0, 0
+  addi $8, $8, 256 # pula pra proxima linha
+  
+  addi $13, $13, 1
+  j forPreencherBotaoSkins
+  
   
   
 escolherBotao:
-  lui $19, 0xffff # Armazena o   endereco de memoria     que armazena 1 se tiver alguma entrada do teclado e 0 se nao
-  addi $16, $0, 32 # espaco ascii
-  addi $17, $0, 87 # W ascii
-  addi $18, $0, 83 # S ascii
-  addi $22, $0, 0 # botao selecionado -  0 = jogar; 1 = skin
-  
-forEscolherBotao:
-  lw $20, 0($19) # armazena no $20 o que esta no endereço de memoria apontado por $19
-  beq $20, $0, continue
-  lw $21, 4($19) # Armazena no $21 a tecla pressionada
-  
-  beq $21, $17, wPressionado
-  addi $17, $0, 119 # w ascii
-  beq $21, $17, wPressionado
-  addi $17, $0, 87 # W ascii
-  
-  beq $21, $18, sPressionado
-  addi $18, $0, 115 # s ascii
-  beq $21, $18, sPressionado
-  addi $18, $0, 83 # S ascii
-  
-  beq $21, $16, espacoPressionado
-  
-  j continue
+  addi $10, $0
+  addi $20, $0, 1 # inicialmente começa no botao jogar
   
   
-espacoPressionado:
-  bne $22, $0, continue # skins selecionado, ainda falta implementar
-  
-  j end # em dev vai finalizar o jogo, porem, na versao de producao retorna pra o run iniciar o jogo
   
   
-wPressionado:
-  beq $22, $0, continue # Jogar ja esta selecionado
-  
-  # selecionar botao jogar
-  addi $4, $0, 1
-  addi $5, $0, 0
-  jal preencherBotao
-  
-  # tirar a selecao do botao skins
-  addi $4, $0, 0
-  addi $5, $0, 1
-  jal preencherBotao
-  
-  addi $22, $0, 0
-  j continue
-  
-  
-sPressionado:
-  bne $22, $0, continue # Skins ja esta selecionado
-  
-  # selecionar botao skins
-  addi $4, $0, 1
-  addi $5, $0, 1
-  jal preencherBotao
-  
-  # tirar a selecao do botao jogar
-  addi $4, $0, 0
-  addi $5, $0, 0
-  jal preencherBotao
-  
-  addi $22, $0, 1
-  j continue
-  
-continue:
-  j forEscolherBotao
   
 end:
   addi $2, $0, 10
@@ -462,25 +438,22 @@ end:
 # $5 = index do botao - 0 botao jogar; 1 botao de skins
 # retorno = void
 
-preencherBotao:
-  sw $31, 0($sp) # Armazena na pilha o endereço de retorno da funcao
-  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha 
-  
+preencherBotaoJogar:
   beq $4, $0, botaoNaoSelecionado
   ori $9, $0, 0xeb984e # botao selecionado
-  j preencherBotaoIndex
- 
+  j preencherBotaoJogarIndex
+  
 botaoNaoSelecionado:
   ori $9, $0, 0xD2691E
-  j preencherBotaoIndex
+  j preencherBotaoJogarIndex
   
-preencherBotaoIndex:
-  beq $5, $0, botaoJogarEscolhido
-  add $8, $0, $24
+preencherBotaoJogarIndex:
+  beq $5, $0, botaoEscolhido
+  addi $8, $0, $24
   j preencherBotaoEscolhido
   
-botaoJogarEscolhido:
-  add $8, $0, $23
+botaoEscolhido:
+  addi $8, $0, $23
   j preencherBotaoEscolhido
 
 preencherBotaoEscolhido:
@@ -490,14 +463,14 @@ preencherBotaoEscolhido:
   addi $12, $0, 11
   addi $13, $0, 0
  
-forPreencherBotao:
+forPreencherBotaoJogar:
   beq $10, $11, nextLine
   
   sw $9, 0($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
-  j forPreencherBotao
+  j forPreencherBotaoJogar
   
 # itera as linhas do interior do botao
 nextLine:
@@ -507,227 +480,9 @@ nextLine:
   addi $8, $8, 256 # pula pra proxima linha
   
   addi $13, $13, 1
-  j forPreencherBotao
+  j forPreencherBotaoJogar
   
-fimPreenchimento:
-  bne $5, $0, escreverLetrasSkins # ainda nao tem
-  
-  jal letrasBotaoJogar
-  
+fimPreenchimento
   addi $4, $0, 0
   addi $5, $0, 0
-  addi $sp, $sp, 4 # recupera o endereço de retorno da funçao na pilha
-  lw $31, 0($sp)
-  jr $31
-  
-escreverLetrasSkins:
-  #jal letrasBotaoSkins
-  
-  addi $4, $0, 0
-  addi $5, $0, 0
-  addi $sp, $sp, 4 # recupera o endereço de retorno da funçao na pilha
-  lw $31, 0($sp)
-  jr $31
-  
-  
-  
-# Letras Botao Jogar
-# retorno void
-
-letrasBotaoJogar:
-  sw $31, 0($sp)
-  addi $sp, $sp, -4
-  
-  ori $9, $0, 0x000000
-  addi $8, $23, 1076
-  add $25, $0, $8
-   
-bjLetraJ:
-  addi $8, $8, 1536
-  
-  addi $10, $0, 4
-  addi $11, $0, 0
-forBjLateralLetraJ:
-  beq $10, $11, bjRestoLetraJ
-  
-  sw $9, 0($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjLateralLetraJ
-  
-bjRestoLetraJ:
-  sw $9, 4($8) # base
-  sw $9, 8($8) # base
-  addi $8, $25, 12
-  
-  addi $10, $0, 7
-  addi $11, $0, 0
-forBjRestoLetraJ:
-  beq $10, $11, bjLetraO
-  
-  sw $9, 0($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjRestoLetraJ
-  
-
-bjLetraO:
-  addi $8, $25, 24
-  add $25, $0, $8
-  
-bjLateraisLetraO:
-  addi $8, $8, 512
-  addi $10, $0, 6
-  addi $11, $0, 0
-forBjLateraisLetraO:
-  beq $10, $11, bjMeioLetraO
-  
-  sw $9, 0($8)
-  sw $9, 16($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjLateraisLetraO
-  
-bjMeioLetraO:
-  addi $8, $25, 4
-  addi $10, $0, 3
-  addi $11, $0, 0
-forBjMeioLetraO:
-  beq $10, $11, bjLetraG
-  
-  sw $9, 0($8)
-  sw $9, 3584($8)
-  addi $8, $8, 4
-  
-  addi $11, $11, 1
-  j forBjMeioLetraO
-  
-bjLetraG:
-  addi $8, $25, 28
-  add $25, $0, $8
-  
-  addi $8, $8, 4 # inicio do meio do G
-  addi $10, $0, 4
-  addi $11, $0, 0
-forBjMeioLetraG:
-  beq $10, $11, bjLateralLetraG
-  
-  sw $9, 0($8)
-  sw $9, 3584($8)
-  addi $8, $8, 4
-  
-  addi $11, $11, 1
-  j forBjMeioLetraG
-  
-bjLateralLetraG:
-  addi $8, $25, 512
-  addi $10, $0, 6
-  addi $11, $0, 0
-forBjLateralLetraG:
-  beq $10, $11, bjRestoLetraG
-  
-  sw $9, 0($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjLateralLetraG
-  
-bjRestoLetraG:
-  add $8, $0, $25
-  sw $9, 3092($8)
-  sw $9, 2580($8)
-  sw $9, 2068($8)
-  sw $9, 2064($8)
-  sw $9, 2060($8)
-  j bjLetraA
-  
-
-bjLetraA:
-  add $8, $25, 32
-  add $25, $0, $8
-  
-  addi $8, $8, 512 # inicio dos laterais do A
-  addi $10, $0, 7
-  addi $11, $0, 0
-forBjLetraA:
-  beq $10, $11, bjMeioLetraA
-  
-  sw $9, 0($8)
-  sw $9, 20($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjLetraA
-  
-bjMeioLetraA:
-  addi $8, $25, 4
-  addi $10, $0, 4
-  addi $11, $0, 0
-forBjMeioLetraA:
-  beq $10, $11, bjLetraR
-  
-  sw $9, 0($8)
-  sw $9, 2048($8)
-  addi $8, $8, 4
-  
-  addi $11, $11, 1
-  j forBjMeioLetraA
-  
-  
-bjLetraR:
-  add $8, $25, 32
-  add $25, $0, $8
-  
-  addi $8, $8, 512 # inicio dos laterais do A
-  addi $10, $0, 7
-  addi $11, $0, 0
-forBjEsquerdaLetraR:
-  beq $10, $11, bjDireitaLetraR
-  
-  sw $9, 0($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjEsquerdaLetraR
-  
-bjDireitaLetraR:
-  add $8, $25, 508
-  addi $10, $0, 3
-  addi $11, $0, 0
-forBjDireitaLetraR:
-  beq $10, $11, bjDireitaRestoLetraR
-  
-  sw $9, 20($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjDireitaLetraR
-  
-bjDireitaRestoLetraR:
-  add $8, $25, 2560
-  sw $9, 16($8)
-  sw $9, 532($8)
-  sw $9, 1044($8)
-  
-bjMeioLetraR:
-  addi $8, $25, 4
-  addi $10, $0, 3
-  addi $11, $0, 0
-forBjMeioLetraR:
-  beq $10, $11, fimLetrasBotaoJogar
-  
-  sw $9, 0($8)
-  sw $9, 2048($8)
-  addi $8, $8, 4
-  
-  addi $11, $11, 1
-  j forBjMeioLetraR
-  
-  
-fimLetrasBotaoJogar:
-  addi $sp, $sp, 4
-  lw $31, 0($sp)
   jr $31
