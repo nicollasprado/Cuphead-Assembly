@@ -411,11 +411,6 @@ nextLineBotaoSkins:
   
   
   
-escolherBotao:
-  addi $10, $0
-  addi $20, $0, 1 # inicialmente começa no botao jogar
-  
-  
   
   
   

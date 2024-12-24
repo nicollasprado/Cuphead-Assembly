@@ -730,4 +730,4 @@ forBjMeioLetraR:
 fimLetrasBotaoJogar:
   addi $sp, $sp, 4
   lw $31, 0($sp)
-  jr $31
+  jr $31 
