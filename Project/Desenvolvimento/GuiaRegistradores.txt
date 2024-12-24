@@ -3,7 +3,7 @@ $8  = ponteiro para endereço de memoria estática
 $9  = cores
 $10 = Limitadores de loops
 $11 = Somadores de loops
-
+$13 = Endereço do inicio do indicador de vida
 
 Tela inicial:
 $16 = Armazenamento de valores ascii
@@ -17,6 +17,5 @@ $24 = Endereço do inicio do inteiro do botão de skins
 
 Cenario:
 $12 = Endereço de inicio do topo do chão (o final é ele + 508)
-$13 = Endereço do inicio do indicador de vida
 
 $25 = Auxiliar (valores temporarios)
