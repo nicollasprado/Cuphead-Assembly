@@ -29,7 +29,7 @@ criarChao:
   lw $12, 0($8)
   
   ori $9, $0, 0xd9a066
-  addi $10, $0, 15360
+  addi $10, $0, 3200
   addi $11, $0, 0
 forChao:
   beq $11, $10, criarMar
@@ -46,7 +46,7 @@ criarMar:
   lui $8, 0x1001
   addi $8, $8, 10752
   
-  ori $9, $0, 0x639bff
+  ori $9, $0, 0x9aa4e1
   
   addi $10, $0, 1664
   addi $11, $0, 0
@@ -65,7 +65,7 @@ criarMontanhas:
   lui $8, 0x1001
   addi $8, $8, 5632
   
-  ori $9, $0, 0x6abe30
+  ori $9, $0, 0x8bbe67
   
   # montanha da esquerda
   addi $10, $0, 45 # qtd de colunas
@@ -314,10 +314,293 @@ proximaColunaCriarArvore:
 baseDaArvore:
   lui $8, 0x1001
   addi $8, $8, 27604
+ 
   
-forBaseDaArvore:
-  j end
-
+    
+gramaEmbaixo:
+  lui $8, 0x1001
+  addi $8, $8, 30208
+  
+  ori $9, $0, 0x395023
+  
+  addi $10, $0, 128
+  addi $11, $0, 0
+forGramaEmbaixo:
+  beq $10, $11, detalhesGramaEmbaixo
+  
+  sw $9, 0($8)
+  sw $9, 512($8)
+  sw $9, 1024($8)
+  sw $9, 1536($8)
+  sw $9, 2048($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forGramaEmbaixo
+  
+detalhesGramaEmbaixo:
+  lui $8, 0x1001
+  addi $8, $8, 30148
+  
+  # Parte da direita embaixo da arvore
+  addi $10, $0, 15
+  addi $11, $0, 0
+  # Loop para desenhar as linhas
+  addi $13, $0, 15
+  addi $14, $0, 0
+forDetalheDireitaGramaEmbaixo:
+  beq $10, $11, detalheEsquerdaGramaEmbaixo
+  
+forLinhasDetalheDireitaGramaEmbaixo:
+  beq $13, $14, fimLinhaDetalheDireitaEmbaixo
+    
+  sw $9, 0($8)
+  addi $8, $8, 4
+  
+  addi $14, $14, 1
+  
+  j forLinhasDetalheDireitaGramaEmbaixo
+ 
+fimLinhaDetalheDireitaEmbaixo: 
+  addi $11, $11, 1
+  addi $13, $13, -1 # reduz o tamanho da linha
+  addi $14, $0, 0   # reset do somador
+  
+  # Retorno pro pixel de cima
+  addi $8, $8, -512
+  addi $25, $0, -4
+  mul $25, $13, $25
+  add $8, $8, $25
+  j forDetalheDireitaGramaEmbaixo
+  
+  
+  
+detalheEsquerdaGramaEmbaixo:
+  lui $8, 0x1001
+  addi $8, $8, 29696
+  
+  addi $10, $0, 5
+  addi $11, $0, 0
+forDetalheEsquerdaGramaEmbaixo:
+  beq $10, $11, continueDetalheEsquerdaGramaEmbaixo
+  
+  sw $9, 0($8)
+  sw $9, -512($8)
+  sw $9, -1024($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forDetalheEsquerdaGramaEmbaixo
+  
+continueDetalheEsquerdaGramaEmbaixo:
+  # Detalhes mais especificos da parte de baixo
+  sw $9, 0($8)
+  sw $9, 4($8)
+  sw $9, -512($8)
+  sw $9, -1024($8)
+  sw $9, -3072($8)
+  
+  sw $9, 12($8)
+  sw $9, 24($8)
+  sw $9, -500($8)
+  sw $9, -496($8)
+  sw $9, -1008($8)
+  
+  sw $9, 32($8)
+  sw $9, -480($8)
+  sw $9, 36($8)
+  sw $9, 40($8)
+  sw $9, 44($8)
+  
+  sw $9, 52($8)
+  sw $9, 60($8)
+  sw $9, -452($8)
+  
+  sw $9, 68($8)
+  sw $9, -444($8)
+  sw $9, -440($8)
+  
+  sw $9, 80($8)
+  sw $9, 84($8)
+  sw $9, 88($8)
+  sw $9, 92($8)
+  sw $9, -428($8)
+  sw $9, -424($8)
+  sw $9, -940($8)
+  
+  sw $9, 100($8)
+  sw $9, 104($8)
+  sw $9, 108($8)
+  sw $9, 112($8)
+  sw $9, 116($8)
+  sw $9, 120($8)
+  sw $9, 124($8)
+  sw $9, -408($8)
+  sw $9, -404($8)
+  sw $9, -400($8)
+  sw $9, -916($8)
+  sw $9, -912($8)
+  sw $9, -908($8)
+  sw $9, -1424($8)
+  sw $9, -1420($8)
+  sw $9, -1416($8)
+  
+  sw $9, 132($8)
+  sw $9, 136($8)
+  sw $9, 140($8)
+  sw $9, -380($8)
+  sw $9, -376($8)
+  sw $9, -892($8)
+  sw $9, -1404($8)
+  sw $9, -1916($8)
+  
+  sw $9, 148($8)
+  sw $9, 152($8)
+  sw $9, 160($8)
+  sw $9, 164($8)
+  sw $9, -360($8)
+  sw $9, -356($8)
+  sw $9, -868($8)
+  sw $9, -864($8)
+  
+  sw $9, 176($8)
+  sw $9, -336($8)
+  sw $9, -332($8)
+  sw $9, -848($8)
+  sw $9, -844($8)
+  sw $9, -1360($8)
+  
+  sw $9, 192($8)
+  sw $9, -320($8)
+  sw $9, -316($8)
+  sw $9, -312($8)
+  sw $9, -832($8)
+  sw $9, -824($8)
+  sw $9, -820($8)
+  sw $9, -1344($8)
+  sw $9, -1348($8)
+  
+  sw $9, 212($8)
+  sw $9, 216($8)
+  sw $9, 220($8)
+  sw $9, -300($8)
+  sw $9, -292($8)
+  sw $9, -804($8)
+  sw $9, -800($8)
+  sw $9, -1316($8)
+  
+  sw $9, 236($8)
+  sw $9, -276($8)
+  sw $9, -280($8)
+  sw $9, -788($8)
+  
+  sw $9, 244($8)
+  sw $9, -268($8)
+  sw $9, -264($8)
+  
+  sw $9, 260($8)
+  sw $9, 264($8)
+  sw $9, -252($8)
+  sw $9, -248($8)
+  sw $9, -244($8)
+  sw $9, -764($8)
+  sw $9, -768($8)
+  
+  sw $9, 284($8)
+  sw $9, -228($8)
+  sw $9, -224($8)
+  sw $9, -736($8)
+  sw $9, -732($8)
+  sw $9, -232($8)
+  sw $9, -744($8)
+  sw $9, -748($8)
+  
+  sw $9, 304($8)
+  sw $9, 308($8)
+  sw $9, 312($8)
+  sw $9, 316($8)
+  sw $9, 320($8)
+  sw $9, 324($8)
+  sw $9, 328($8)
+  sw $9, 332($8)
+  sw $9, 336($8)
+  sw $9, 340($8)
+  sw $9, -208($8)
+  sw $9, -200($8)
+  sw $9, -196($8)
+  sw $9, -192($8)
+  sw $9, -184($8)
+  sw $9, -180($8)
+  sw $9, -176($8)
+  sw $9, -696($8)
+  
+  sw $9, 356($8)
+  sw $9, 360($8)
+  sw $9, 364($8)
+  sw $9, 368($8)
+  sw $9, 372($8)
+  sw $9, 376($8)
+  sw $9, 380($8)
+  sw $9, 384($8)
+  sw $9, 388($8)
+  sw $9, 392($8)
+  sw $9, -160($8)
+  sw $9, -156($8)
+  sw $9, -152($8)
+  sw $9, -148($8)
+  sw $9, -144($8)
+  sw $9, -140($8)
+  sw $9, -136($8)
+  sw $9, -132($8)
+  sw $9, -128($8)
+  sw $9, -652($8)
+  sw $9, -656($8)
+  
+  sw $9, 404($8)
+  sw $9, 408($8)
+  sw $9, 412($8)
+  sw $9, -108($8)
+  sw $9, -104($8)
+  sw $9, -100($8)
+  sw $9, -620($8)
+  sw $9, -612($8)
+  sw $9, -608($8)
+  
+  #########################
+  
+  lui $8, 0x1001
+  addi $8, $8, 28164
+  
+  addi $10, $0, 4
+  addi $11, $0, 0
+  
+  # Para o loop criador de linhas
+  addi $13, $0, 4
+  addi $14, $0, 0
+forContinueDetalheEsquerdaGramaEmbaixo:
+  beq $10, $11, end
+  
+forLinhasDetalheEsquerdaGramaEmbaixo:
+  beq $13, $14, fimLinhaDetalheEsquerdaGramaEmbaixo
+  
+  sw $9, 0($8)
+  addi $8, $8, 4
+  
+  addi $14, $14, 1
+  j forLinhasDetalheEsquerdaGramaEmbaixo
+  
+fimLinhaDetalheEsquerdaGramaEmbaixo:
+  addi $11, $11, 1
+  addi $13, $13, -1
+  addi $14, $0, 0
+  
+  addi $8, $8, -512
+  addi $25, $0, -4
+  mul $25, $25, $13
+  add $8, $8, $25
+  
+  j forContinueDetalheEsquerdaGramaEmbaixo
+  
 
 
 end:
