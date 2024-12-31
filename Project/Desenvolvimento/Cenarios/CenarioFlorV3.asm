@@ -26,19 +26,94 @@ criarChao:
   lui $8, 0x1001
   addi $8, $8, 17408
   # Manda pro $12 o inicio do topo do chao
-  lw $12, 0($8)
-  
+  add $12, $0, $8
+
   ori $9, $0, 0xd9a066
-  addi $10, $0, 3200
+  addi $10, $0, 3208
   addi $11, $0, 0
 forChao:
-  beq $11, $10, criarMar
+  beq $11, $10, chaoArredondamento
   
   sw $9, 0($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
   j forChao
+  
+  
+  
+chaoArredondamento:
+  lui $8, 0x1001
+  addi $8, $8, 17408 
+  # Arredondamento
+  ori $9, $0, 0x8bbe67
+  
+  # Loop da qtd de linhas
+  addi $10, $0, 6
+  addi $11, $0, 0
+  
+  # Loop preenchedor de linhas
+  addi $14, $0, 24
+  addi $15, $0, 0
+forArredondamento:
+  beq $10, $11, chaoArredondamentoDireita
+
+forLinhasArredondamento:
+  beq $14, $15, fimLinhaArredondamento
+
+  sw $9, 0($8)
+  addi $8, $8, 4
+  
+  addi $15, $15, 1
+  j forLinhasArredondamento
+  
+fimLinhaArredondamento:
+  addi $11, $11, 1
+  addi $14, $14, -4
+  addi $15, $0, 0
+  
+  # Endereço de memoria do inicio da proxima linha
+  add $8, $0, $12
+  mul $24, $11, 512
+  add $8, $8, $24
+  j forArredondamento
+ 
+   
+
+chaoArredondamentoDireita:
+  lui $8, 0x1001
+  addi $8, $8, 17916
+  add $23, $0, $8
+  
+  # Loop da qtd de linhas
+  addi $10, $0, 6
+  addi $11, $0, 0
+  
+  # Loop preenchedor de linhas
+  addi $14, $0, 24
+  addi $15, $0, 0
+forArredondamentoDireita:
+  beq $10, $11, criarMar
+
+forLinhasArredondamentoDireita:
+  beq $14, $15, fimLinhaArredondamentoDireita
+
+  sw $9, 0($8)
+  addi $8, $8, -4
+  
+  addi $15, $15, 1
+  j forLinhasArredondamentoDireita
+  
+fimLinhaArredondamentoDireita:
+  addi $11, $11, 1
+  addi $14, $14, -4
+  addi $15, $0, 0
+  
+  # Endereço de memoria do inicio da proxima linha
+  add $8, $0, $23
+  mul $24, $11, 512
+  add $8, $8, $24
+  j forArredondamentoDireita
   
   
   
