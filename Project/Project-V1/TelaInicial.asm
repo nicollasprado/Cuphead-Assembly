@@ -3,7 +3,7 @@
 
 # Preenche o fundo
 telaInicial:
-  sw $31, 0($sp) # Armazena na pilha o endereço de retorno do RUN
+  sw $31, 0($sp)    # Armazena na pilha o endereço de retorno do RUN
   addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha
 
 
@@ -404,9 +404,13 @@ forEscolherBotao:
   
   
 espacoPressionado:
-  bne $22, $0, continue # skins selecionado, ainda falta implementar
+  bne $22, $0, botaoDeBaixo # botao de baixo selecionado, ainda falta implementar
   
   addi $3, $0, 1 # 1 = jogar selecionado
+  j retorno
+  
+botaoDeBaixo:
+  addi $3, $0, 0
   j retorno
   
   

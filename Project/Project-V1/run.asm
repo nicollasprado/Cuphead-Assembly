@@ -4,13 +4,15 @@ main: jal telaInicial
       beq $3, $0, outroBotao
       
       # Jogar selecionado
+      jal cenarioFlor
       
-      jal criarCenario
+continueBuild:
       jal criarIndicadorHP
       j end
       
 outroBotao:
-  j end
+  jal cenarioSereia
+  j continueBuild
 
 
 end:
