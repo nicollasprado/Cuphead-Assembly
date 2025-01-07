@@ -1,8 +1,12 @@
 .text
 
-.globl main, end # Exporta as labels para outros arquivos do diretorio
+.globl cenarioFlor
 
-main:
+cenarioFlor:
+  sw $31, 0($sp)    # Armazena na pilha o endereço de retorno
+  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha
+  
+  
   lui $8, 0x1001 # Endereço inicial do cenario
     
   # Criaçao do ceu
@@ -686,13 +690,9 @@ plataformas:
   addi $4, $0, 14912
   jal criarPlataforma
   
-  j end
-  
-
-
-end:
-  addi $2, $0, 10
-  syscall
+  addi $sp, $sp, 4 # Atualiza o ponteiro do endereço de memoria da pilha
+  lw $31, 0($sp)
+  jr $31
 
 
 
@@ -943,4 +943,6 @@ proxLinhaBaseInteriorPlataforma:
   j forInteriorPlataforma
   
 retornoPlataforma:
+  addi $sp, $sp, 4 # Atualiza o ponteiro do endereço de memoria da pilha
+  lw $31, 0($sp)
   jr $31
