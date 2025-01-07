@@ -10,12 +10,11 @@ $16 = Armazenamento de valores ascii
 $19 = contem o endereço de memoria que será utilizado pelo $20
 $20 = Armazena 1 se tiver entrada do teclado e 0 se não
 $21 = Armazena a tecla que o usuario digitou
-$22 = Botao escolhido -  0 = botao jogar; 1 = botao skins
-$23 = Endereço do inicio do interior do botão de jogar
-$24 = Endereço do inicio do inteiro do botão de skins
+$22 = Botao escolhido -  0 = fase da flor; 1 = fase da sereia
+$23 = Endereço do inicio do interior do botão da fase da flor
+$24 = Endereço do inicio do inteiro do botão da fase da sereia
 
 
 Cenario:
 $12 = Endereço de inicio do topo do chão (o final é ele + 508)
-
 $25 = Auxiliar (valores temporarios)
