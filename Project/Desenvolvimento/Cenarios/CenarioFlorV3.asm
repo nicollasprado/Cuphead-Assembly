@@ -356,9 +356,189 @@ fimInicioMontanhaDireita:
   j forMontanhaDireita
 
 
+
 criarArvore:
+  # Criaçao das folhas
   lui $8, 0x1001
-  addi $8, $8, 8152 # posiçao inicial da arvore de cima pra baixo
+  addi $8, $8, 9148 # posiçao inicial da arvore de cima pra baixo
+  
+  ori $9, $0, 0x274e13
+  
+  # quantidade de linhas
+  addi $10, $0, 18
+  addi $11, $0, 0
+  # tamanho das linhas
+  addi $13, $0, 17
+  addi $14, $0, 0
+forFolhasArvore:
+  beq $10, $11, folhasArvoreEsquerda
+  
+  add $16, $0, $8 # salva o inicio da linha a cada iteracao
+forLinhasFolhasArvore:
+  beq $13, $14, proxLinhaFolhasArvore
+  
+  sw $9, 0($8)
+  addi $8, $8, 4
+  
+  addi $14, $14, 1
+  j forLinhasFolhasArvore
+  
+proxLinhaFolhasArvore:
+  addi $11, $11, 1
+  addi $14, $0, 0
+  
+  add $8, $16, -512
+  
+  j forFolhasArvore
+  
+  
+folhasArvoreEsquerda:
+  addi $8, $8, 500
+  add $25, $0, $8 # salva o inicio dessas colunas para facilitar as outras colunas
+  
+  # tamanho das colunas
+  addi $10, $0, 17
+  addi $11, $0, 0
+forFolhasArvoreEsq:
+  beq $10, $11, proxColunasFolhasArvoreEsquerda
+  
+  sw $9, 0($8)
+  sw $9, 4($8)
+  sw $9, 8($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forFolhasArvoreEsq
+  
+  
+proxColunasFolhasArvoreEsquerda:
+  ori $9, $0, 0x5fcde4 # cor do ceu
+  sw $9, -512($8)
+  
+  addi $8, $25, -8 # inicio dessas colunas
+  ori $9, $0, 0x274e13 # cor da folha escura
+  
+  # tamanho das colunas
+  addi $10, $0, 12
+  addi $11, $0, 0
+forProxColunasFolhasArvoreEsquerda:
+  beq $10, $11, linhasFolhasArvoreEsq
+  
+  sw $9, 0($8)
+  sw $9, 4($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forProxColunasFolhasArvoreEsquerda
+  
+
+linhasFolhasArvoreEsq:
+  addi $8, $25, 1512
+  
+  # tamanho das linhas
+  addi $10, $0, 5
+  addi $11, $0, 0
+forLinhasFolhasArvoreEsq:
+  beq $10, $11, detalhesLinhasFolhasArvoreEsq
+  
+  sw $9, 0($8)
+  sw $9, 512($8)
+  sw $9, 1024($8)
+  sw $9, 1536($8)
+  sw $9, 2048($8)
+  sw $9, 2560($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forLinhasFolhasArvoreEsq
+
+detalhesLinhasFolhasArvoreEsq:
+  ori $9, $0, 0x5fcde4 # cor do ceu
+  sw $9, 2540($8)
+ 
+  ori $9, $0, 0x38761d # cor da folha clara
+  sw $9, -20($8)
+  sw $9, 492($8)
+  sw $9, -520($8)
+  sw $9, -524($8)
+  sw $9, 3064($8)
+  sw $9, 3580($8)
+  
+detalhesInteriorFolhasArvore:
+  # começa no canto superior esquerdo da arvore
+  addi $8, $25, -8
+  
+  sw $9, 0($8)
+  sw $9, 4($8)
+  sw $9, 8($8)
+  
+  sw $9, 28($8)
+  sw $9, 536($8)
+  
+  sw $9, 84($8)
+  sw $9, 596($8)
+  
+  sw $9, 40($8)
+  sw $9, 44($8)
+  sw $9, 48($8)
+  sw $9, 560($8)
+  sw $9, 564($8)
+  sw $9, 568($8)
+  sw $9, 572($8)
+  sw $9, 1088($8)
+  sw $9, 1092($8)
+  sw $9, 1604($8)
+  sw $9, 1608($8)
+  sw $9, 2120($8)
+  sw $9, 2124($8)
+  sw $9, 2636($8)
+  sw $9, 3148($8)
+  sw $9, 3660($8)
+  sw $9, 4172($8)
+  
+  sw $9, 1560($8)
+  sw $9, 1556($8)
+  sw $9, 1552($8)
+  sw $9, 2064($8)
+  sw $9, 2060($8)
+  sw $9, 2056($8)
+  sw $9, 2052($8)
+  sw $9, 2568($8)
+  sw $9, 2564($8)
+  sw $9, 2560($8)
+  sw $9, 2556($8)
+  
+  sw $9, 6152($8)
+  sw $9, 7688($8)
+  sw $9, 5644($8)
+  sw $9, 5648($8)
+  sw $9, 5136($8)
+  sw $9, 4628($8)
+  sw $9, 4632($8)
+  sw $9, 4636($8)
+  sw $9, 4128($8)
+  sw $9, 4132($8)
+  sw $9, 4136($8)
+  sw $9, 4140($8)
+  sw $9, 4144($8)
+  sw $9, 4148($8)
+  sw $9, 4660($8)
+  sw $9, 4664($8)
+  sw $9, 4668($8)
+  
+  sw $9, 8732($8)
+  sw $9, 8736($8)
+  sw $9, 8740($8)
+  sw $9, 8744($8)
+  sw $9, 8748($8)
+  sw $9, 8752($8)
+
+  
+  
+
+troncoArvore:
+  lui $8, 0x1001
+  addi $8, $8, 8168 # posiçao inicial da arvore de cima pra baixo
   ori $9, $0, 0x6a5f3d
   
   # primeiro loop
@@ -366,7 +546,7 @@ criarArvore:
   addi $11, $0, 0
   
   # loop interior
-  addi $14, $0, 7
+  addi $14, $0, 5
   addi $15, $0, 0
   
 forCriarArvore:
@@ -379,17 +559,146 @@ forCriarArvore:
   j forCriarArvore
   
 proximaColunaCriarArvore:
-  beq $14, $15, baseDaArvore
+  beq $14, $15, detalhesArvore
   
   addi $11, $0, 0
   addi $15, $15, 1
   addi $8, $8, -19964
   j forCriarArvore
   
-baseDaArvore:
+detalhesArvore:
   lui $8, 0x1001
-  addi $8, $8, 27604
- 
+  addi $8, $8, 7656
+  
+  # detalhes mais especificos
+  sw $9, 0($8)
+  sw $9, 4($8)
+  sw $9, 8($8)
+  sw $9, -508($8)
+  sw $9, -504($8)
+  
+  sw $9, 16($8)
+  sw $9, 20($8)
+  sw $9, -492($8)
+  sw $9, -1004($8)
+  sw $9, -1516($8)
+  ########
+  
+  # Galho do canto superior esquerdo
+  lui $8, 0x1001
+  addi $8, $8, 7128
+  
+  sw $9, 508($8)
+  
+  # Controlador do tamanho da coluna
+  addi $13, $0, 3
+  addi $14, $0, 0
+forGalhoSupEsquerdo: 
+  add $15, $0, $8 # salva o inicio da coluna a cada iteraçao
+forDesenharColunaGalhoSupEsq:
+  beq $13, $14, proxColunaGalhoSupEsq
+  
+  sw $9, 0($8)
+  addi $8, $8, 512
+  
+  addi $14, $14, 1
+  j forDesenharColunaGalhoSupEsq
+  
+proxColunaGalhoSupEsq:
+  addi $14, $0, 0
+  addi $11, $11, 1
+  
+  # checa em qual coluna esta para alterar o tamanho da coluna
+  addi $16, $0, 3
+  beq $13, $16, galhoSupEsqTamanhoTres
+  addi $16, $0, 6
+  beq $13, $16, galhoSupEsqTamanhoSeis
+  addi $16, $0, 7
+  beq $13, $16, galhoSupEsqTamanhoSete
+  addi $16, $0, 11
+  beq $13, $16, raizArvore # se passar por aqui ja acabou de fazer o galho superior esquerdo
+  
+galhoSupEsqTamanhoTres:
+  addi $13, $0, 6
+  addi $8, $15, 516
+  j forGalhoSupEsquerdo
+  
+galhoSupEsqTamanhoSeis:
+  addi $13, $0, 7
+  addi $8, $15, 516
+  j forGalhoSupEsquerdo
+  
+galhoSupEsqTamanhoSete:
+  addi $13, $0, 11
+  addi $8, $15, 516
+  j forGalhoSupEsquerdo
+  
+raizArvore:
+  lui $8, 0x1001
+  addi $8, $8, 20964
+  
+  addi $10, $0, 14
+  addi $11, $0, 0
+forPrimeiraColunaRaizArvore:
+  beq $10, $11, segundaColunaRaizArvore
+  
+  sw $9, 0($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forPrimeiraColunaRaizArvore
+  
+segundaColunaRaizArvore:
+  addi $8, $8, -4100
+  
+  addi $10, $0, 8
+  addi $11, $0, 0
+forSegundaColunaRaizArvore:
+  beq $10, $11, restoRaizArvore
+  
+  sw $9, 0($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forSegundaColunaRaizArvore
+  
+restoRaizArvore:
+  addi $8, $8, -3076
+  
+  # quantidade de colunas
+  addi $10, $0, 5
+  addi $11, $0, 0
+  # Tamanho das colunas
+  addi $13, $0, 6
+  addi $14, $0, 0
+forRestoRaizArvore:
+  beq $10, $11, detalhesRestoRaizArvore
+  
+  add $15, $0, $8 # armazena o inicio da coluna toda iteracao
+forColunaRestoRaizArvore:
+  beq $13, $14, proxColunaRestoRaizArvore
+  
+  sw $9, 0($8)
+  addi $8, $8, 512
+  
+  addi $14, $14, 1
+  j forColunaRestoRaizArvore
+  
+proxColunaRestoRaizArvore:
+  addi $14, $0, 0
+  addi $13, $13, -1
+  
+  addi $8, $15, 508
+  
+  addi $11, $11, 1
+  j forRestoRaizArvore
+  
+detalhesRestoRaizArvore:
+  sw $9, -512($8)
+  sw $9, 0($8)
+  sw $9, -4($8)
+  sw $9, -8($8)
+  
   
     
 gramaEmbaixo:
