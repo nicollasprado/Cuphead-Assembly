@@ -1,25 +1,24 @@
 .text
-.globl telaInicial
+.globl telaSelecaoFase
+
+.main: j telaSelecaoFase
+
 
 # Preenche o fundo
-telaInicial:
-  sw $31, 0($sp)    # Armazena na pilha o endereço de retorno do RUN
-  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha
-
-
+telaSelecaoFase:
   lui $8, 0x1001
   ori $9, $0, 0x1E90FF
   
   addi $10, $0, 8192
   addi $11, $0, 0
-forTelaInicial:
+forSelecaoFase:
   beq $10, $11, titulo
   
   sw $9, 0($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
-  j forTelaInicial
+  j forSelecaoFase
   
   
   
@@ -262,7 +261,7 @@ restoLetraD:
   addi $10, $0, 9
   addi $11, $0, 0
 forRestoLetraD:
-  beq $10, $11, botaoJogar
+  beq $10, $11, botaoFaseUm
   
   sw $9, 0($8)
   addi $8, $8, 512
@@ -272,7 +271,7 @@ forRestoLetraD:
   
   
   
-botaoJogar:
+botaoFaseUm:
   ori $9, $0, 0xffffff
   
   lui $8, 0x1001
@@ -283,44 +282,45 @@ botaoJogar:
   addi $10, $0, 64
   addi $11, $0, 0
   
-forBotaoJogar:
-  beq $10, $11, lateraisBotaoJogar
+forBotaoFaseUm:
+  beq $10, $11, lateraisBotaoFaseUm
   
   sw $9, 0($8)
   sw $9, 6656($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
-  j forBotaoJogar
+  j forBotaoFaseUm
   
   
-lateraisBotaoJogar:
+lateraisBotaoFaseUm:
   addi $8, $25, 508 # recupera o valor do anterior ao inicio do botao
   
   addi $10, $0, 12
   addi $11, $0, 0
   
-forLateraisBotaoJogar:
-  beq $10, $11, preencherBotaoJogar
+forLateraisBotaoFaseUm:
+  beq $10, $11, preencherBotaoFaseUm
   
   sw $9, 0($8)     # esquerda
   sw $9, 260($8)   # direita
   addi $8, $8, 512 # proxima linha
   
   addi $11, $11, 1
-  j forLateraisBotaoJogar
+  j forLateraisBotaoFaseUm
   
   
-preencherBotaoJogar:
+preencherBotaoFaseUm:
   addi $23, $25, 512
   addi $4, $0, 1
   addi $5, $0, 0
   jal preencherBotao
   
-jal letrasBotaoJogar
+addi $4, $0, -3716
+addi $5, $0, 0
+jal fraseFase
   
-  
-botaoSkins:
+botaoFaseDois:
   ori $9, $0, 0xffffff
   
   lui $8, 0x1001
@@ -330,35 +330,35 @@ botaoSkins:
   addi $10, $0, 64
   addi $11, $0, 0
   
-forBotaoSkins:
-  beq $10, $11, lateraisBotaoSkins
+forBotaoFaseDois:
+  beq $10, $11, lateraisBotaoFaseDois
   
   sw $9, 0($8)
   sw $9, 6656($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
-  j forBotaoSkins
+  j forBotaoFaseDois
   
   
-lateraisBotaoSkins:
+lateraisBotaoFaseDois:
   addi $8, $25, 508 # recupera o valor do anterior ao inicio do botao
   
   addi $10, $0, 12
   addi $11, $0, 0
   
-forLateraisBotaoSkins:
-  beq $10, $11, preencherBotaoSkins
+forLateraisBotaoFaseDois:
+  beq $10, $11, preencherBotaoFaseDois
   
   sw $9, 0($8)     # esquerda
   sw $9, 260($8)   # direita
   addi $8, $8, 512 # proxima linha
   
   addi $11, $11, 1
-  j forLateraisBotaoSkins
+  j forLateraisBotaoFaseDois
   
   
-preencherBotaoSkins:
+preencherBotaoFaseDois:
   ori $9, $0, 0xD2691E
   addi $8, $25, 512 # recupera o valor do inicio da parte interna do botao
   add $24, $0, $8   # salva o inicio da parte interna do botao skins
@@ -369,11 +369,15 @@ preencherBotaoSkins:
   addi $12, $0, 11
   addi $13, $0, 0
  
-forPreencherBotaoSkins:
+forPreencherBotaoFaseDois:
   addi $24, $25, 512
   addi $4, $0, 0
   addi $5, $0, 1
   jal preencherBotao
+  
+  addi $4, $0, -3740
+  addi $5, $0, 1
+  jal fraseFase
   
   
 escolherBotao:
@@ -404,14 +408,14 @@ forEscolherBotao:
   
   
 espacoPressionado:
-  bne $22, $0, botaoDeBaixo # botao de baixo selecionado, ainda falta implementar
+  bne $22, $0, botaoFaseDoisSelecionado # botao fase dois selecionado
   
-  addi $3, $0, 1 # 1 = jogar selecionado
-  j retorno
+  #addi $3, $0, 1 # botao fase um selecionado, em dev nao retorna nada
+  j end
   
-botaoDeBaixo:
-  #addi $3, $0, 0
-  j continue
+botaoFaseDoisSelecionado:
+  #addi $3, $0, 0 # em dev nao retorna nada
+  j end
   
   
 wPressionado:
@@ -450,10 +454,10 @@ sPressionado:
 continue:
   j forEscolherBotao
   
-retorno:
-  addi $sp, $sp, 4 # recupera o endereço de retorno da funçao na pilha
-  lw $31, 0($sp)
-  jr $31
+end:
+  addi $2, $0, 10
+  syscall
+  
   
   
   
@@ -471,8 +475,8 @@ retorno:
 
 preencherBotao:
   sw $31, 0($sp) # Armazena na pilha o endereço de retorno da funcao
-  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha
-
+  addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha 
+  
   beq $4, $0, botaoNaoSelecionado
   ori $9, $0, 0xeb984e # botao selecionado
   j preencherBotaoIndex
@@ -518,8 +522,10 @@ nextLine:
   
 fimPreenchimento:
   bne $5, $0, escreverLetrasSkins # ainda nao tem
-  
-  jal letrasBotaoJogar
+ 
+  addi $4, $0, -4812
+  addi $5, $0, 0
+  jal fraseFase
   
   addi $4, $0, 0
   addi $5, $0, 0
@@ -528,7 +534,9 @@ fimPreenchimento:
   jr $31
   
 escreverLetrasSkins:
-  #jal letrasBotaoSkins
+  addi $4, $0, -4812
+  addi $5, $0, 1
+  jal fraseFase
   
   addi $4, $0, 0
   addi $5, $0, 0
@@ -537,205 +545,216 @@ escreverLetrasSkins:
   jr $31
   
   
-  
-  
-# Letras Botao Jogar
+
+
+# Frase FASE
+# $4 -> endereço do canto superior esquerdo do F
+# $5 -> 0 == numero 1  e  1 == numero 2
 # retorno void
 
-letrasBotaoJogar:
+fraseFase:
   sw $31, 0($sp)
   addi $sp, $sp, -4
   
   ori $9, $0, 0x000000
-  addi $8, $23, 1076
+  add $8, $8, $4
+  
+faseLetraF:
   add $25, $0, $8
-   
-bjLetraJ:
-  addi $8, $8, 1536
+  
+  addi $10, $0, 8
+  addi $11, $0, 0
+forLateralFaseF:
+  beq $10, $11, restoFaseF
+  
+  sw $9, 0($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forLateralFaseF
+  
+restoFaseF:
+  addi $8, $25, 4
   
   addi $10, $0, 4
   addi $11, $0, 0
-forBjLateralLetraJ:
-  beq $10, $11, bjRestoLetraJ
+forRestoFaseF:
+  beq $10, $11, faseLetraA
   
   sw $9, 0($8)
-  addi $8, $8, 512
+  sw $9, 1536($8)
+  addi $8, $8, 4
   
   addi $11, $11, 1
-  j forBjLateralLetraJ
+  j forRestoFaseF
   
-bjRestoLetraJ:
-  sw $9, 4($8) # base
-  sw $9, 8($8) # base
-  addi $8, $25, 12
   
-  addi $10, $0, 7
-  addi $11, $0, 0
-forBjRestoLetraJ:
-  beq $10, $11, bjLetraO
-  
-  sw $9, 0($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjRestoLetraJ
-  
-
-bjLetraO:
-  addi $8, $25, 24
+faseLetraA:
+  addi $8, $8, 8
   add $25, $0, $8
   
-bjLateraisLetraO:
   addi $8, $8, 512
-  addi $10, $0, 6
+  addi $10, $0, 7
   addi $11, $0, 0
-forBjLateraisLetraO:
-  beq $10, $11, bjMeioLetraO
+forLateralFaseA:
+  beq $10, $11, restoFaseA
   
   sw $9, 0($8)
   sw $9, 16($8)
   addi $8, $8, 512
   
   addi $11, $11, 1
-  j forBjLateraisLetraO
+  j forLateralFaseA
   
-bjMeioLetraO:
+restoFaseA:
   addi $8, $25, 4
+  
   addi $10, $0, 3
   addi $11, $0, 0
-forBjMeioLetraO:
-  beq $10, $11, bjLetraG
+forRestoFaseA:
+  beq $10, $11, faseLetraS
   
   sw $9, 0($8)
+  sw $9, 1536($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forRestoFaseA
+  
+
+faseLetraS:
+  addi $8, $25, 28
+  add $25, $0, $8
+  addi $8, $8, 4
+  
+  addi $10, $0, 3
+  addi $11, $0, 0
+forLinhasFaseS:
+  beq $10, $11, lateralFaseS
+  
+  sw $9, 0($8)
+  sw $9, 2048($8)
   sw $9, 3584($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
-  j forBjMeioLetraO
+  j forLinhasFaseS
   
-bjLetraG:
+  
+lateralFaseS:
+  addi $8, $25, 2576
+  # parte da direita em baixo
+  sw $9, 0($8)
+  sw $9, 512($8)
+
+  # parte da esquerda em cima
+  addi $8, $25, 512
+  
+  addi $10, $0, 3
+  addi $11, $0, 0
+forLateralFaseS:
+  beq $10, $11, detalhesFaseS
+  
+  sw $9, 0($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forLateralFaseS
+  
+  
+detalhesFaseS:
+  addi $8, $25, 528
+  sw $9, 0($8)
+  addi $8, $25, 3072
+  sw $9, 0($8)
+  
+faseLetraE:
   addi $8, $25, 28
   add $25, $0, $8
   
-  addi $8, $8, 4 # inicio do meio do G
-  addi $10, $0, 4
+  addi $10, $0, 8
   addi $11, $0, 0
-forBjMeioLetraG:
-  beq $10, $11, bjLateralLetraG
+forLateralFaseE:
+  beq $10, $11, restoFaseE
   
   sw $9, 0($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forLateralFaseE
+  
+  
+restoFaseE:
+  addi $8, $25, 4
+  
+  addi $10, $0, 3
+  addi $11, $0, 0
+forRestoFaseE:
+  beq $10, $11, numeroDaFase
+  
+  sw $9, 0($8)
+  sw $9, 1536($8)
   sw $9, 3584($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
-  j forBjMeioLetraG
+  j forRestoFaseE
   
-bjLateralLetraG:
-  addi $8, $25, 512
-  addi $10, $0, 6
-  addi $11, $0, 0
-forBjLateralLetraG:
-  beq $10, $11, bjRestoLetraG
-  
-  sw $9, 0($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjLateralLetraG
-  
-bjRestoLetraG:
-  add $8, $0, $25
-  sw $9, 3092($8)
-  sw $9, 2580($8)
-  sw $9, 2068($8)
-  sw $9, 2064($8)
-  sw $9, 2060($8)
-  j bjLetraA
-  
-
-bjLetraA:
-  add $8, $25, 32
+numeroDaFase:
+  addi $8, $25, 44
   add $25, $0, $8
   
-  addi $8, $8, 512 # inicio dos laterais do A
-  addi $10, $0, 7
-  addi $11, $0, 0
-forBjLetraA:
-  beq $10, $11, bjMeioLetraA
-  
-  sw $9, 0($8)
-  sw $9, 20($8)
-  addi $8, $8, 512
-  
-  addi $11, $11, 1
-  j forBjLetraA
-  
-bjMeioLetraA:
-  addi $8, $25, 4
-  addi $10, $0, 4
-  addi $11, $0, 0
-forBjMeioLetraA:
-  beq $10, $11, bjLetraR
-  
-  sw $9, 0($8)
-  sw $9, 2048($8)
   addi $8, $8, 4
+  bgt $5, $0, numeroDois
   
-  addi $11, $11, 1
-  j forBjMeioLetraA
-  
-  
-bjLetraR:
-  add $8, $25, 32
-  add $25, $0, $8
-  
-  addi $8, $8, 512 # inicio dos laterais do A
-  addi $10, $0, 7
+  # Numero 1 escolhido
+  addi $10, $0, 8
   addi $11, $0, 0
-forBjEsquerdaLetraR:
-  beq $10, $11, bjDireitaLetraR
+forNumeroUm:
+  beq $10, $11, fimNumeroUm
   
   sw $9, 0($8)
   addi $8, $8, 512
   
   addi $11, $11, 1
-  j forBjEsquerdaLetraR
+  j forNumeroUm
   
-bjDireitaLetraR:
-  add $8, $25, 508
-  addi $10, $0, 3
-  addi $11, $0, 0
-forBjDireitaLetraR:
-  beq $10, $11, bjDireitaRestoLetraR
+fimNumeroUm:
+  sw $9, -3588($8)
+  addi $8, $8, -512
+  sw $9, 4($8)
+  sw $9, -4($8)
+  j retornoFraseFase
   
-  sw $9, 20($8)
-  addi $8, $8, 512
   
-  addi $11, $11, 1
-  j forBjDireitaLetraR
-  
-bjDireitaRestoLetraR:
-  add $8, $25, 2560
+numeroDois:
+  sw $9, 512($8)
+  sw $9, 4($8)
+  sw $9, 8($8)
+  sw $9, 12($8)
   sw $9, 16($8)
   sw $9, 532($8)
   sw $9, 1044($8)
+  sw $9, 1552($8)
+  sw $9, 2060($8)
+  sw $9, 2056($8)
+  sw $9, 2564($8)
+  sw $9, 3072($8)
   
-bjMeioLetraR:
-  addi $8, $25, 4
-  addi $10, $0, 3
+  addi $8, $8, 3584
+  addi $10, $0, 6
   addi $11, $0, 0
-forBjMeioLetraR:
-  beq $10, $11, fimLetrasBotaoJogar
+forBaseNumDois:
+  beq $10, $11, retornoFraseFase
   
   sw $9, 0($8)
-  sw $9, 2048($8)
   addi $8, $8, 4
   
   addi $11, $11, 1
-  j forBjMeioLetraR
+  j forBaseNumDois
+
   
-  
-fimLetrasBotaoJogar:
+retornoFraseFase:
   addi $sp, $sp, 4
   lw $31, 0($sp)
   jr $31
