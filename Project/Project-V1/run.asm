@@ -25,6 +25,7 @@ main:
   
   jal criarIndicadorHP
   
+  
 loopPrincipalCenarioFlor:
   addi $24, $0, 15360 # $24 => canto superior esquerdo do player
   
@@ -52,6 +53,12 @@ movimentacaoCenarioFlor:
   
   
 andarEsquerdaCenarioFlor:
+  add $4, $0, $24
+  addi $5, $0, 0
+  jal checarColisaoCenarioFlor
+  
+  bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao diferente de 0 nao pode andar
+
   # salvar fundo atras do personagem
   addi $4, $0, 0     # 0 = pintar
   add $5, $0, $24    # canto superior esquerdo do personagem
@@ -73,6 +80,13 @@ andarEsquerdaCenarioFlor:
   
   
 andarDireitaCenarioFlor:
+  add $4, $0, $24
+  addi $5, $0, 1
+  jal checarColisaoCenarioFlor
+  
+  bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao diferente de 0 nao pode andar
+  
+  
   # salvar fundo atras do personagem
   addi $4, $0, 0     # 0 = pintar
   add $5, $0, $24   # 1 pixel antes do canto superior esquerdo do personagem
@@ -182,6 +196,68 @@ andouEsquerdaPintarFundoCenarioFlor:
   
   
 retornoFundoCenarioFlor:
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
+  
+  
+  
+#####################
+# funçao para checar as colisoes do personagem principal
+# $4 => canto superior esquerdo do personagem
+# $5 => 0 = andou pra esquerda,  1 = andou pra direita
+# Retorno: $3 => 0 se pode andar, 1 se nao pode andar
+# Registradores usados: $10, $11, $15
+
+checarColisaoCenarioFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  addi $3, $0, 0 # pode andar por padrao, o loop que ira modificar caso nao possa
+  
+  beq $5, $0, checarColisaoCenarioFlorEsquerda
+  
+  # se continuar e para checar a direita
+  addi $15, $0, 400
+  
+  # checa toda a coluna da tela, se estiver no ultimo pixel da direita, nao pode andar
+  addi $10, $0, 64
+  addi $11, $0, 0
+forChecarColisaoCenarioFlorDireita:
+  beq $10, $11, retornoChecarColisao
+  
+  beq $15, $4, colisaoDetectadaCenarioFlor
+  addi $15, $15, 512
+  
+  addi $11, $11, 1
+  j forChecarColisaoCenarioFlorDireita
+  
+  
+checarColisaoCenarioFlorEsquerda:
+  addi $15, $0, 0
+  
+  # checa toda a coluna da tela, se estiver no ultimo pixel da direita, nao pode andar
+  addi $10, $0, 64
+  addi $11, $0, 0
+forChecarColisaoCenarioFlorEsquerda:
+  beq $10, $11, retornoChecarColisao
+  
+  beq $15, $4, colisaoDetectadaCenarioFlor
+  addi $15, $15, 512
+  
+  addi $11, $11, 1
+  j forChecarColisaoCenarioFlorEsquerda
+
+  
+colisaoDetectadaCenarioFlor:
+  addi $3, $0, 1
+  j retornoChecarColisao
+  
+retornoChecarColisao:
+  # reset das propriedades da funçao
+  addi $4, $0, 0
+  addi $5, $0, 0
+  
   addi $sp, $sp, 4
   lw $31, 0($sp)
   jr $31
