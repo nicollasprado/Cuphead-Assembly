@@ -5,9 +5,33 @@
 # $4 -> endereço de inicio do desenho, canto superior esquerdo
 # $5 -> 0 == olhando pra direita,  1 == olhando pra esquerda
 # Implementar aqui com $5 as animaçoes
+# registradores usados: $9, $10, $11, $13, $14, $15, $16
 desenharCuphead:
   sw $31, 0($sp)
   addi $sp, $sp, -4
+  
+  sw $9, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $10, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $11, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $13, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $14, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $15, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $16, 0($sp)
+  addi $sp, $sp, -4
+  
+  
   
   lui $8, 0x1001
   add $8, $8, $4
@@ -277,6 +301,27 @@ restoOlhoDireitoCupheadDir:
 
 
 retorno:
+  addi $sp, $sp, 4
+  lw $16, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $15, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $14, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $13, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $11, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $10, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $9, 0($sp)
+
   addi $sp, $sp, 4
   lw $31, 0($sp)
   jr $31
