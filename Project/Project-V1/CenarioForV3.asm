@@ -9,6 +9,7 @@ cenarioFlor:
 
 
   lui $8, 0x1001 # Endereço inicial do cenario
+  add $8, $8, $4
     
   # Criaçao do ceu
   ori $9, $0, 0x5fcde4 # cor
@@ -30,6 +31,7 @@ forCeu:
 criarChao:
   lui $8, 0x1001
   addi $8, $8, 17408
+  add $8, $8, $4
   # Manda pro $12 o inicio do topo do chao
   add $12, $0, $8
 
@@ -49,7 +51,8 @@ forChao:
   
 chaoArredondamento:
   lui $8, 0x1001
-  addi $8, $8, 17408 
+  addi $8, $8, 17408
+  add $8, $8, $4
   # Arredondamento
   ori $9, $0, 0x8bbe67
   
@@ -96,6 +99,7 @@ contornoChaoArredondamentoEsq:
 chaoArredondamentoDireita:
   lui $8, 0x1001
   addi $8, $8, 17916
+  add $8, $8, $4
   add $23, $0, $8
   
   ori $9, $0, 0x8bbe67
@@ -159,6 +163,7 @@ forContornoChaoTopo:
 criarMar:
   lui $8, 0x1001
   addi $8, $8, 10752
+  add $8, $8, $4
   
   ori $9, $0, 0x7887e4
   
@@ -186,6 +191,7 @@ corNormalMar:
 criarMontanhas:
   lui $8, 0x1001
   addi $8, $8, 5632
+  add $8, $8, $4
   
   ori $9, $0, 0x8bbe67
   
@@ -358,6 +364,7 @@ proxLinhaMontanhaCentro:
 montanhaDireita:
   lui $8, 0x1001
   addi $8, $8, 10236 # inicio das colunas da montanha da direita
+  add $8, $8, $4
   
   # Loop da criaçao das colunas
   addi $10, $0, 15 # altura das colunas
@@ -496,6 +503,7 @@ fimInicioMontanhaDireita:
 detalhesMontanhaEsquerda:
   lui $8, 0x1001
   addi $8, $8, 6724
+  add $8, $8, $4
   add $25, $0, $8
   
   ori $9, $0, 0x8f563b
@@ -543,6 +551,7 @@ criarArvore:
   # Criaçao das folhas
   lui $8, 0x1001
   addi $8, $8, 9148 # posiçao inicial da arvore de cima pra baixo
+  add $8, $8, $4
   
   ori $9, $0, 0x274e13
   
@@ -721,6 +730,7 @@ detalhesInteriorFolhasArvore:
 troncoArvore:
   lui $8, 0x1001
   addi $8, $8, 8168 # posiçao inicial da arvore de cima pra baixo
+  add $8, $8, $4
   ori $9, $0, 0x6a5f3d
   
   # primeiro loop
@@ -751,6 +761,7 @@ proximaColunaCriarArvore:
 detalhesArvore:
   lui $8, 0x1001
   addi $8, $8, 7656
+  add $8, $8, $4
   
   # detalhes mais especificos
   sw $9, 0($8)
@@ -769,6 +780,7 @@ detalhesArvore:
   # Galho do canto superior esquerdo
   lui $8, 0x1001
   addi $8, $8, 7128
+  add $8, $8, $4
   
   sw $9, 508($8)
   
@@ -818,6 +830,7 @@ galhoSupEsqTamanhoSete:
 raizArvore:
   lui $8, 0x1001
   addi $8, $8, 20964
+  add $8, $8, $4
   
   addi $10, $0, 14
   addi $11, $0, 0
@@ -886,6 +899,7 @@ detalhesRestoRaizArvore:
 gramaEmbaixo:
   lui $8, 0x1001
   addi $8, $8, 30208
+  add $8, $8, $4
   
   ori $9, $0, 0x395023
   
@@ -907,6 +921,7 @@ forGramaEmbaixo:
 detalhesGramaEmbaixo:
   lui $8, 0x1001
   addi $8, $8, 30148
+  add $8, $8, $4
   
   # Parte da direita embaixo da arvore
   addi $10, $0, 15
@@ -944,6 +959,7 @@ fimLinhaDetalheDireitaEmbaixo:
 detalheEsquerdaGramaEmbaixo:
   lui $8, 0x1001
   addi $8, $8, 29696
+  add $8, $8, $4
   
   addi $10, $0, 5
   addi $11, $0, 0
@@ -1136,6 +1152,7 @@ continueDetalheEsquerdaGramaEmbaixo:
   
   lui $8, 0x1001
   addi $8, $8, 28164
+  add $8, $8, $4
   
   addi $10, $0, 4
   addi $11, $0, 0
@@ -1168,13 +1185,15 @@ fimLinhaDetalheEsquerdaGramaEmbaixo:
   j forContinueDetalheEsquerdaGramaEmbaixo
   
 plataformas:
-  addi $4, $0, 12552
+  add $25, $0, $4
+
+  addi $4, $25, 12552
   jal criarPlataforma
   
-  addi $4, $0, 12452
+  addi $4, $25, 12452
   jal criarPlataforma
   
-  addi $4, $0, 12352
+  addi $4, $25, 12352
   jal criarPlataforma
   
   addi $sp, $sp, 4 # Atualiza o ponteiro do endereço de memoria da pilha

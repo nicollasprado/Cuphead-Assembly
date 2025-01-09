@@ -12,12 +12,11 @@ main:
   beq $3, $0, faseSereia
       
   # cenario da flor
+  addi $4, $0, 0
   jal cenarioFlor
-  
-  # salvar fundo atras do personagem
-  addi $4, $0, 0     # 0 salvar
-  addi $5, $0, 15360 # canto superior esquerdo do personagem
-  jal refazerFundoCenarioFlor
+  # salvamento da copia do mapa
+  addi $4, $0, 32768 # um endereço abaixo do primeiro bloco da ultima linha
+  jal cenarioFlor
   
   # desenhar personagem
   addi $4, $0, 15360 # endereço do cuphead
@@ -53,7 +52,7 @@ movimentacaoCenarioFlor:
 andarEsquerdaCenarioFlor:
   # salvar fundo atras do personagem
   addi $4, $0, 0     # 0 = pintar
-  add $5, $0, $24   # canto superior esquerdo do personagem
+  add $5, $0, $24    # canto superior esquerdo do personagem
   addi $6, $0, 0     # 0 = andou pra esquerda
   jal refazerFundoCenarioFlor
   
@@ -119,23 +118,22 @@ end:
 #####################
 # funçao para desenhar o cenario atras quando o personagem se move
 # Essa funçao pinta o fundo com o que era o cenario, depois disso e necessario chamar a funcao que pinta o persongaem novamente na nova posicao
-# $4 => 0 salvar, 1 pintar
 # $5 => canto superior esquerdo do personagem
 # $6 => 0 = andou pra esquerda,  1 = andou pra direita
 refazerFundoCenarioFlor:
   sw $31, 0($sp)
   addi $sp, $sp, -4
   
+  # Inicio do cenario copiado na memoria
   lui $23, 0x1001
-  addi $23, $23, 32772
+  addi $23, $23, 32768
+  add $23, $23, $5
   
+  # endereço da posicao a ser refeita
   add $21, $0, $5
   lui $5, 0x1001
   add $5, $5, $21
   
-  beq $4, $0, salvarFundoAntigoCenarioFlor
-  
-  # se continuar e para desenhar o fundo
   beq $6, $0, andouEsquerdaPintarFundoCenarioFlor
   addi $5, $5, 0
   
@@ -149,11 +147,13 @@ continuePintarFundoCenarioFlor:
 forPintarFundoAntigoCenarioFlor:
   beq $10, $11, retornoFundoCenarioFlor
   
-  add $21, $0, $5 # salva o inicio da linha
+  add $20, $0, $23 # salva o inicio da linha do mapa copiado
+  add $21, $0, $5 # salva o inicio da linha da posicao a ser refeita
 forPintarLinhasFundoAntigoCenarioFlor:
   beq $13, $14, proxLinhaPintarFundoAntigoCenarioFlor
   
-  sw $23, 0($5)
+  lw $9, 0($23)
+  sw $9, 0($5)
   addi $5, $5, 4
   addi $23, $23, 4
   
@@ -162,7 +162,11 @@ forPintarLinhasFundoAntigoCenarioFlor:
   
 proxLinhaPintarFundoAntigoCenarioFlor:
   addi $14, $0, 0
+  
+  # proxima linha
   addi $5, $21, 512
+  addi $23, $20, 512
+  
   addi $11, $11, 1
   j forPintarFundoAntigoCenarioFlor
 
@@ -170,36 +174,6 @@ proxLinhaPintarFundoAntigoCenarioFlor:
 andouEsquerdaPintarFundoCenarioFlor:
   addi $5, $5, 0
   j continuePintarFundoCenarioFlor
-  
-  
-salvarFundoAntigoCenarioFlor:
-  # qtd de linhas
-  addi $10, $0, 22
-  addi $11, $0, 0
-  # tamanho das linhas
-  addi $13, $0, 18
-  addi $14, $0, 0
-forSalvarFundoAntigoCenarioFlor:
-  beq $10, $11, retornoFundoCenarioFlor
-  
-  add $21, $0, $5 # salva o inicio da linha
-forSalvarLinhaFundoAntigoCenarioFlor:
-  beq $13, $14, proxLinhaFundoAntigoCenarioFlorSalvar
-  
-  sw $5, 0($23)
-  addi $23, $23, 4
-  addi $5, $5, 4
-  
-  addi $14, $14, 1
-  j forSalvarLinhaFundoAntigoCenarioFlor
-  
-proxLinhaFundoAntigoCenarioFlorSalvar:
-  addi $14, $0, 0
-  addi $5, $21, 512
-  addi $11, $11, 1
-  
-  j forSalvarFundoAntigoCenarioFlor
-  
   
   
 retornoFundoCenarioFlor:
