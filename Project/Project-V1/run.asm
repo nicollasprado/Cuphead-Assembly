@@ -23,6 +23,8 @@ main:
   addi $5, $0, 0    # 0 = olhando pra direita
   jal desenharCuphead
   
+  jal criarIndicadorHP
+  
 loopPrincipalCenarioFlor:
   addi $24, $0, 15360 # $24 => canto superior esquerdo do player
   
@@ -96,7 +98,9 @@ continueMovCenarioFlor:
   
   
   
+  # Loop que mantem o jogo funcionando
   j loopPrincipalCenarioFlor
+      
       
       
       
@@ -107,6 +111,7 @@ continueBuild:
 faseSereia:
   jal cenarioSereia
   j continueBuild
+
 
 
 end:
