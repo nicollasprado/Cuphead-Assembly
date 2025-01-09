@@ -34,6 +34,7 @@ loopPrincipalCenarioFlor:
   addi $15, $0, 65 # A ascii
   addi $16, $0, 68 # D ascii
   addi $17, $0, 87 # W ascii
+  addi $18, $0, 83 # S ascii
 movimentacaoCenarioFlor:
   lw $15, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
   beq $15, $0, continueMovCenarioFlor
@@ -54,6 +55,11 @@ movimentacaoCenarioFlor:
   addi $17, $0, 119 # w ascii
   beq $15, $17, pularCenarioFlor
   addi $17, $0, 87 # W ascii
+  
+  beq $15, $18, sPressionadoCenarioFlor
+  addi $18, $0, 115 # w ascii
+  beq $15, $18, sPressionadoCenarioFlor
+  addi $18, $0, 83 # W ascii
   
   j continueMovCenarioFlor
   
@@ -82,7 +88,11 @@ andarEsquerdaCenarioFlor:
   jal desenharCuphead
   
   add $24, $0, $4     # atualiza a posiçao do jogador
-  j movimentacaoCenarioFlor
+  
+  jal checarColisaoPlataformaCenarioFlor
+  
+  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
+  
   j movimentacaoCenarioFlor
   
   
@@ -103,8 +113,40 @@ andarDireitaCenarioFlor:
   jal desenharCuphead
   
   add $24, $0, $4     # atualiza a posiçao do jogador
+  
+  jal checarColisaoPlataformaCenarioFlor
+  
+  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
+  
   j movimentacaoCenarioFlor
   
+  
+descerPlataformaCenarioFlor:
+  # checa se o player esta na altura das plataformas
+  addi $10, $0, 14332 # ultimo pixel a direita na altura das plataformas
+  bgt $24, $10, naoEstaEmPlataformaCenarioFlor
+  
+  # desce o player da plataforma
+  addi $10, $0, 24
+  addi $11, $0, 0
+forDescerPlataformaCenarioFlor:
+  beq $10, $11, movimentacaoCenarioFlor
+  
+  # salvar fundo atras do personagem
+  add $5, $0, $24   # 1 pixel antes do canto superior esquerdo do personagem
+  jal refazerFundoCenarioFlor
+  
+  addi $4, $24, 512     # endereço do cuphead
+  addi $5, $0, 0      # 0 = olhando pra direita
+  jal desenharCuphead
+  
+  add $24, $0, $4     # atualiza a posiçao do jogador
+  jal timer
+  addi $11, $11, 1
+  j forDescerPlataformaCenarioFlor
+  
+naoEstaEmPlataformaCenarioFlor:
+  j movimentacaoCenarioFlor
   
   
 pularCenarioFlor:
@@ -183,7 +225,7 @@ continuarPuloCenarioFlor:
 descerPularCenarioFlor:
   addi $11, $0, 0
 forDescerPularCenarioFlor:
-  beq $10, $11, movimentacaoCenarioFlor
+  beq $10, $11, fimQuedaCenarioFlor
   
   # Para poder se mover em quanto cai
   lw $15, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
@@ -210,9 +252,20 @@ continueQuedaCenarioFlor:
   jal desenharCuphead
   
   add $24, $0, $4     # atualiza a posiçao do jogador
+  
+  # reg 4 ja esta sendo alterado na funcao entao nao tem que especificar
+  jal checarColisaoPlataformaCenarioFlor
+  
+  beq $3, $0, subiuPlataformaPulo
+  
   jal timer
   addi $11, $11, 1
   j forDescerPularCenarioFlor
+  
+  
+subiuPlataformaPulo:
+  j movimentacaoCenarioFlor
+  
   
 andarEsquerdaEmQuedaCenarioFlor:
   addi $4, $24, -512
@@ -238,9 +291,20 @@ andarDireitaEmQuedaCenarioFlor:
   jal timer
   j continueQuedaCenarioFlor
   
-  
 continuarQuedaCenarioFlor:
   j continueQuedaCenarioFlor
+  
+fimQuedaCenarioFlor:
+  jal checarColisaoPlataformaCenarioFlor
+  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
+  j movimentacaoCenarioFlor
+  
+  
+  
+sPressionadoCenarioFlor:
+  jal checarColisaoPlataformaCenarioFlor
+  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
+  j movimentacaoCenarioFlor
   
   
 continueMovCenarioFlor:
@@ -427,10 +491,10 @@ checarColisaoCenarioFlor:
   beq $5, $0, checarColisaoCenarioFlorEsquerda
   
   # se continuar e para checar a direita
-  addi $15, $0, 400
+  addi $15, $0, -32368
   
   # checa toda a coluna da tela, se estiver no ultimo pixel da direita, nao pode andar
-  addi $10, $0, 64
+  addi $10, $0, 128
   addi $11, $0, 0
 forChecarColisaoCenarioFlorDireita:
   beq $10, $11, retornoChecarColisao
@@ -443,10 +507,10 @@ forChecarColisaoCenarioFlorDireita:
   
   
 checarColisaoCenarioFlorEsquerda:
-  addi $15, $0, 0
+  addi $15, $0, -32768
   
   # checa toda a coluna da tela, se estiver no ultimo pixel da direita, nao pode andar
-  addi $10, $0, 64
+  addi $10, $0, 128
   addi $11, $0, 0
 forChecarColisaoCenarioFlorEsquerda:
   beq $10, $11, retornoChecarColisao
@@ -469,6 +533,91 @@ retornoChecarColisao:
   
   addi $sp, $sp, 4
   lw $15, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $11, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $10, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
+  
+
+#####################
+# Checar colisao plataforma
+# Essa funçao retorna 0 caso o player subiu em uma plataforma e 1 se nao
+# $4 => canto superior esquerdo do personagem
+# Retorno: $3 => 0 se subiu na plataforma, 1 se nao subiu
+# Registradores usados: $10, $11, $14
+checarColisaoPlataformaCenarioFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $10, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $11, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $14, 0($sp)
+  addi $sp, $sp, -4
+  
+  # checagem
+  addi $3, $0, 1    # começa negado
+  addi $4, $4, 9244 # meio entre os pes do personagem
+  
+  addi $14, $0, 12544 # inicio da plataforma da direita
+  
+  addi $10, $0, 10 # qtd de pixels do pe esquerdo ao direito
+  addi $11, $0, 0
+forChecarColisaoPlataformaDireita:
+  beq $10, $11, checarColisaoPlataformaMeio
+  
+  beq $14, $4, subiuPlataforma
+  addi $14, $14, 4
+  
+  addi $11, $11, 1
+  j forChecarColisaoPlataformaDireita
+  
+  
+checarColisaoPlataformaMeio:
+  addi $14, $0, 12444 # inicio da plataforma do meio
+  
+  addi $11, $0, 0
+forChecarColisaoPlataformaMeio:
+  beq $10, $11, checarColisaoPlataformaEsquerda
+  
+  beq $14, $4, subiuPlataforma
+  addi $14, $14, 4
+  
+  addi $11, $11, 1
+  j forChecarColisaoPlataformaMeio
+  
+
+checarColisaoPlataformaEsquerda:
+  addi $14, $0, 12344 # inicio da plataforma do meio
+  
+  addi $11, $0, 0
+forChecarColisaoPlataformaEsquerda:
+  beq $10, $11, retornoChecarColisaoPlataformaCenarioFlor
+  
+  beq $14, $4, subiuPlataforma
+  addi $14, $14, 4
+  
+  addi $11, $11, 1
+  j forChecarColisaoPlataformaEsquerda
+  
+  
+  
+subiuPlataforma:
+  addi $3, $0, 0
+  j retornoChecarColisaoPlataformaCenarioFlor
+  
+retornoChecarColisaoPlataformaCenarioFlor:
+  addi $sp, $sp, 4
+  lw $14, 0($sp)
   
   addi $sp, $sp, 4
   lw $11, 0($sp)
