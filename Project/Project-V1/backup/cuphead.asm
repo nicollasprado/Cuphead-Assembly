@@ -1,32 +1,17 @@
 .text
 
-main:
-  lui $8, 0x1001
-  add $25, $0, $8
+.globl desenharCuphead
 
-# dev only
-background:
-  addi $10, $0, 8192
-  addi $11, $0, 0
-  ori $9, $0, 0xfcab4c
-forbg:
-  beq $10, $11, desenharCuphead
-  
-  sw $9, 0($8)
-  addi $8, $8, 4
-  
-  addi $11, $11, 1
-  j forbg
- 
- 
- 
- 
+# $4 -> endereço de inicio do personagem, canto superior esquerdo do personagem
 desenharCuphead:
-  add $8, $0, $25
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
   
 desenharCabeca:
   ori $9, $0, 0x000000
-  addi $8, $25, 2592
+  lui $8, 0x1001
+  add $8, $8, $4
+  addi $8, $8, 2592
   add $24, $0, $8
   
   # Quantidade de linhas
@@ -488,6 +473,7 @@ restoAlca:
   sw $9, 2560($8)
 
   
-end:
-  addi $2, $0, 10
-  syscall
+retorno:
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31

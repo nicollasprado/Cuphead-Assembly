@@ -2,6 +2,7 @@
 
 .globl cenarioFlor
 
+# $4 -> endereço de inicio de criaçao do mapa na memoria
 cenarioFlor:
   sw $31, 0($sp)    # Armazena na pilha o endereço de retorno
   addi $sp, $sp, -4 # Atualiza o ponteiro do endereço de memoria da pilha
@@ -1167,13 +1168,13 @@ fimLinhaDetalheEsquerdaGramaEmbaixo:
   j forContinueDetalheEsquerdaGramaEmbaixo
   
 plataformas:
-  addi $4, $0, 15112
+  addi $4, $0, 12552
   jal criarPlataforma
   
-  addi $4, $0, 15012
+  addi $4, $0, 12452
   jal criarPlataforma
   
-  addi $4, $0, 14912
+  addi $4, $0, 12352
   jal criarPlataforma
   
   addi $sp, $sp, 4 # Atualiza o ponteiro do endereço de memoria da pilha
