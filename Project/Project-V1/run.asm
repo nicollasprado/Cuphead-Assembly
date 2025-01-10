@@ -23,6 +23,11 @@ main:
   addi $5, $0, 0    # 0 = olhando pra direita
   jal desenharCuphead
   
+  lui $10, 0x1001
+  addi $10, $10, 65548 # endereço que guarda a direçao que esta olhando
+  sw $0, 0($10)
+  
+  
   jal criarIndicadorHP
   
   
@@ -83,9 +88,14 @@ andarEsquerdaCenarioFlor:
   jal refazerFundoCenarioFlor
   
   # desenha o personagem
-  addi $4, $24, -4    # endereço do cuphead
-  addi $5, $0, 0      # 0 = olhando pra direita
+  addi $4, $24, -4  # endereço do cuphead
+  addi $5, $0, 1    # 1 = olhando pra esquerda
   jal desenharCuphead
+  
+  lui $22, 0x1001
+  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
+  addi $23, $0, 1     # esquerda
+  sw $23, 0($22)
   
   add $24, $0, $4     # atualiza a posiçao do jogador
   
@@ -112,6 +122,10 @@ andarDireitaCenarioFlor:
   addi $5, $0, 0      # 0 = olhando pra direita
   jal desenharCuphead
   
+  lui $22, 0x1001
+  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
+  sw $0, 0($22)
+  
   add $24, $0, $4     # atualiza a posiçao do jogador
   
   jal checarColisaoPlataformaCenarioFlor
@@ -136,8 +150,10 @@ forDescerPlataformaCenarioFlor:
   add $5, $0, $24   # 1 pixel antes do canto superior esquerdo do personagem
   jal refazerFundoCenarioFlor
   
-  addi $4, $24, 512     # endereço do cuphead
-  addi $5, $0, 0      # 0 = olhando pra direita
+  addi $4, $24, 512 # endereço do cuphead
+  lui $23, 0x1001
+  addi $23, $23, 65548 # endereço que guarda a direçao que esta olhando
+  lw $5, 0($23)     # direçao que esta olhando
   jal desenharCuphead
   
   add $24, $0, $4     # atualiza a posiçao do jogador
@@ -183,7 +199,9 @@ continuePuloCenarioFlor:
   jal refazerFundoCenarioFlor
   
   addi $4, $24, -512    # endereço do cuphead
-  addi $5, $0, 0        # 0 = olhando pra direita
+  lui $23, 0x1001
+  addi $23, $23, 65548
+  lw $5, 0($23)        # para onde esta olhando
   jal desenharCuphead
   
   add $24, $0, $4     # atualiza a posiçao do jogador
@@ -199,6 +217,11 @@ andarEsquerdaEmPuloCenarioFlor:
   jal checarColisaoCenarioFlor
 
   bne $3, $0, continuarPuloCenarioFlor
+  
+  lui $22, 0x1001
+  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
+  addi $23, $0, 1
+  sw $23, 0($22)
 
   addi $24, $24, -4
   
@@ -211,6 +234,10 @@ andarDireitaEmPuloCenarioFlor:
   jal checarColisaoCenarioFlor
   
   bne $3, $0, continuarPuloCenarioFlor
+  
+  lui $22, 0x1001
+  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
+  sw $0, 0($22)
 
   addi $24, $24, 4
   
@@ -248,7 +275,9 @@ continueQuedaCenarioFlor:
   jal refazerFundoCenarioFlor
   
   addi $4, $24, 512     # endereço do cuphead
-  addi $5, $0, 0      # 0 = olhando pra direita
+  lui $23, 0x1001
+  addi $23, $23, 65548
+  lw $5, 0($23)      # direçao que esta olhando
   jal desenharCuphead
   
   add $24, $0, $4     # atualiza a posiçao do jogador
@@ -273,6 +302,11 @@ andarEsquerdaEmQuedaCenarioFlor:
   jal checarColisaoCenarioFlor
   
   bne $3, $0, continuarQuedaCenarioFlor
+  
+  lui $22, 0x1001
+  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
+  addi $23, $0, 1     # esquerda
+  sw $23, 0($22)
 
   addi $24, $24, -4
   
@@ -285,6 +319,10 @@ andarDireitaEmQuedaCenarioFlor:
   jal checarColisaoCenarioFlor
   
   bne $3, $0, continuarQuedaCenarioFlor
+  
+  lui $22, 0x1001
+  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
+  sw $0, 0($22)
 
   addi $24, $24, 4
   

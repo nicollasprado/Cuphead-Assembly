@@ -38,6 +38,278 @@ desenharCuphead:
   
   beq $5, $0, desenharCupheadDireita
   
+  # desenhar pra esquerda
+  add $25, $0, $8
+  
+  # Canudo
+  # branco
+  ori $9, $0, 0xffffff
+  addi $8, $8, 56
+  sw $9, 0($8)
+  sw $9, 8($8)
+  sw $9, 512($8)
+  sw $9, 516($8)
+  sw $9, 524($8)
+  # vermelho
+  ori $9, $0, 0xac3232
+  sw $9, 4($8)
+  sw $9, 520($8)
+  sw $9, 1024($8)
+  sw $9, 1028($8)
+  
+# Cabeça
+  addi $8, $8, 1544
+  ori $9, $0, 0xc6c6c6
+  # qtd de linhas
+  addi $10, $0, 8
+  addi $11, $0, 0
+  # tamanho da linha
+  addi $13, $0, 14
+  addi $14, $0, 0
+forCabecaCupheadEsquerda:
+  beq $10, $11, camisaCupheadEsquerda
+  
+  add $15, $0, $8 # inicio de cada linha
+forLinhasCabecaCupheadEsq:
+  beq $13, $14, proxLinhaCabecaCupheadEsq
+  
+  sw $9, 0($8)
+  addi $8, $8, -4
+  
+  addi $14, $14, 1
+  j forLinhasCabecaCupheadEsq
+  
+proxLinhaCabecaCupheadEsq:
+  addi $14, $0, 0
+  addi $11, $11, 1
+  
+  addi $16, $0, 6
+  beq $11, $16, ajusteBaseCabecaCupheadEsq
+  addi $16, $0, 7
+  beq $11, $16, ajusteUltimaLinhaBaseCabecaCupheadEsq
+  
+  addi $8, $15, 512
+  j forCabecaCupheadEsquerda
+  
+ajusteBaseCabecaCupheadEsq:
+  addi $13, $13, -2
+  addi $8, $15, 508
+  j forCabecaCupheadEsquerda
+
+ajusteUltimaLinhaBaseCabecaCupheadEsq:
+  addi $13, $13, -4
+  addi $8, $15, 504
+  j forCabecaCupheadEsquerda
+  
+  
+camisaCupheadEsquerda:
+  ori $9, $0, 0x000000
+  addi $8, $8, -40
+  
+  addi $10, $0, 12
+  addi $11, $0, 0
+forCamisaCupheadEsq:
+  beq $10, $11, restoCamisaCupheadEsq
+  
+  sw $9, 0($8)
+  sw $9, 516($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forCamisaCupheadEsq
+  
+  
+restoCamisaCupheadEsq:
+  sw $9, 464($8)
+  
+  sw $9, 1024($8)
+  sw $9, 1020($8)
+  
+  # luvas
+  ori $9, $0, 0xffffff
+  sw $9, 1536($8)
+  sw $9, 1532($8)
+  sw $9, 2048($8)
+  sw $9, 2044($8)
+  
+  sw $9, 460($8)
+  sw $9, 456($8)
+  sw $9, -52($8)
+  sw $9, -56($8)
+  sw $9, -60($8)
+  sw $9, -564($8)
+  
+  # resto da camisa
+  addi $8, $8, 1012
+  ori $9, $0, 0x000000
+  
+  addi $10, $0, 6
+  addi $11, $0, 0
+forRestoCamisaCupheadEsq:
+  beq $10, $11, calcaCupheadEsq
+  
+  sw $9, 0($8)
+  sw $9, 512($8)
+  addi $8, $8, -4
+  
+  addi $11, $11, 1
+  j forRestoCamisaCupheadEsq
+
+  
+calcaCupheadEsq:
+  ori $9, $0, 0xac3232
+  addi $8, $8, 1048
+  
+  # tamanho da linha
+  addi $10, $0, 6
+  addi $11, $0, 0
+forCalcaCupheadEsq:
+  beq $10, $11, restoCalcaCupheadEsq
+  
+  sw $9, 0($8)
+  sw $9, 512($8)
+  addi $8, $8, -4
+  
+  addi $11, $11, 1
+  j forCalcaCupheadEsq
+  
+  
+restoCalcaCupheadEsq:
+  sw $9, 1028($8)
+  sw $9, 1032($8)
+  sw $9, 1040($8)
+  sw $9, 1044($8)
+  sw $9, 1048($8)
+
+  # Pernas
+  ori $9, $0, 0xc6c6c6
+  sw $9, 1540($8)
+  sw $9, 1544($8)
+  sw $9, 1556($8)
+  sw $9, 1560($8)
+  sw $9, 2052($8)
+  sw $9, 2056($8)
+  sw $9, 2068($8)
+  sw $9, 2072($8)
+  
+  # Sapatos
+  ori $9, $0, 0x663931
+  addi $8, $8, 2564
+  sw $9, -4($8)
+  sw $9, 0($8)
+  sw $9, 4($8)
+  sw $9, 16($8)
+  sw $9, 20($8)
+  sw $9, 24($8)
+  sw $9, 504($8)
+  sw $9, 508($8)
+  sw $9, 512($8)
+  sw $9, 516($8)
+  sw $9, 528($8)
+  sw $9, 532($8)
+  sw $9, 536($8)
+  sw $9, 540($8)
+  
+  
+rostoCupheadEsquerda:
+  # Olho esquerdo
+  ori $9, $0, 0xffffff
+  addi $8, $8, -8720
+  
+  addi $10, $0, 5
+  addi $11, $0, 0
+forOlhoEsqCupheadEsq:  
+  beq $10, $11, olhoDirCupheadEsq
+
+  sw $9, 0($8)
+  sw $9, 512($8)
+  sw $9, 1024($8)
+  sw $9, 1536($8)
+  sw $9, 2048($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forOlhoEsqCupheadEsq
+  
+
+olhoDirCupheadEsq:
+  addi $8, $8, 4
+  
+  addi $10, $0, 7
+  addi $11, $0, 0
+forOlhoDirCupheadEsq:
+  beq $10, $11, restoRostoCupheadEsq
+  
+  sw $9, 0($8)
+  sw $9, 512($8)
+  sw $9, 1024($8)
+  sw $9, 1536($8)
+  sw $9, 2048($8)
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j  forOlhoDirCupheadEsq
+
+  
+restoRostoCupheadEsq:
+  addi $8, $8, 1504
+  
+  # nariz
+  ori $9, $0, 0xac3232
+  sw $9, 0($8)
+  sw $9, 4($8)  
+  sw $9, -512($8)  
+  sw $9, -508($8)
+  
+  # detalhes olho
+  ori $9, $0, 0xc6c6c6
+  sw $9, 508($8)
+  sw $9, 516($8)
+  sw $9, 540($8)
+  
+  # parte preta olho esquerdo
+  ori $9, $0, 0x000000
+  sw $9, -8($8)
+  sw $9, -12($8)
+  sw $9, -524($8)
+  sw $9, -1036($8)
+  sw $9, -1032($8)
+  
+  # parte preta olho direito
+  sw $9, -500($8)
+  sw $9, -1008($8)
+  sw $9, -1012($8)
+  sw $9, 12($8)
+  sw $9, 16($8)
+  
+  # boca
+  sw $9, 1028($8)
+  sw $9, 1032($8)
+  sw $9, 1036($8)
+  sw $9, 1040($8)
+  sw $9, 1540($8)
+  sw $9, 1544($8)
+  ori $9, $0, 0xac3232
+  sw $9, 1548($8)
+  sw $9, 1552($8)
+  
+  
+  
+  j retornoDesenharCuphead
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 desenharCupheadDireita:
   # Canudo
   # branco
@@ -300,7 +572,9 @@ restoOlhoDireitoCupheadDir:
   
 
 
-retorno:
+retornoDesenharCuphead:
+  addi $5, $0, 0
+
   addi $sp, $sp, 4
   lw $16, 0($sp)
   

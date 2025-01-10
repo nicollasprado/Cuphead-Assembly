@@ -5,6 +5,12 @@ $10 = Limitadores de loops
 $11 = Somadores de loops
 $13 = Endereço do inicio do indicador de vida
 
+Endereços:
+65540 = Dano do jogador
+65544 = Velocidade do jogador
+65548 = Direção que está olhando, 0 = direita, 1 = esquerda
+
+
 Tela inicial:
 $16 = Armazenamento de valores ascii
 $19 = contem o endereço de memoria que será utilizado pelo $20
