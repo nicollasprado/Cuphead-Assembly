@@ -364,6 +364,11 @@ faseSereia:
   jal cenarioSereia
   addi $4, $0, 32768 # um endereço abaixo do primeiro bloco da ultima linha
   jal cenarioSereia
+  
+  # desenhar o boss
+  addi $4, $0, 8604
+  jal criarSereia
+  
   j continueBuild
 
 
