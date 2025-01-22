@@ -18,6 +18,10 @@ main:
   addi $4, $0, 32768 # um endereço abaixo do primeiro bloco da ultima linha
   jal cenarioFlor
   
+  # desenhar o boss
+  addi $4, $0, 5984
+  jal criarFlor
+  
   # desenhar personagem
   addi $4, $0, 15360 # endereço do cuphead
   addi $5, $0, 0    # 0 = olhando pra direita
@@ -41,29 +45,29 @@ loopPrincipalCenarioFlor:
   addi $17, $0, 87 # W ascii
   addi $18, $0, 83 # S ascii
 movimentacaoCenarioFlor:
-  lw $15, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
-  beq $15, $0, continueMovCenarioFlor
+  lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
+  beq $13, $0, continueMovCenarioFlor
   
-  lw $15, 4($12) # Armazena no $12 a tecla pressionada
+  lw $13, 4($12) # Armazena no $12 a tecla pressionada
   
-  beq $15, $13, andarEsquerdaCenarioFlor
-  addi $13, $0, 97 # a ascii
-  beq $15, $13, andarEsquerdaCenarioFlor
-  addi $13, $0, 65 # A ascii
+  beq $13, $15, andarEsquerdaCenarioFlor
+  addi $15, $0, 97 # a ascii
+  beq $13, $15, andarEsquerdaCenarioFlor
+  addi $15, $0, 65 # A ascii
   
-  beq $15, $14, andarDireitaCenarioFlor
+  beq $13, $14, andarDireitaCenarioFlor
   addi $14, $0, 100 # d ascii
-  beq $15, $14, andarDireitaCenarioFlor
+  beq $13, $14, andarDireitaCenarioFlor
   addi $14, $0, 68 # D ascii
   
-  beq $15, $17, pularCenarioFlor
+  beq $13, $17, pularCenarioFlor
   addi $17, $0, 119 # w ascii
-  beq $15, $17, pularCenarioFlor
+  beq $13, $17, pularCenarioFlor
   addi $17, $0, 87 # W ascii
   
-  beq $15, $18, sPressionadoCenarioFlor
+  beq $13, $18, sPressionadoCenarioFlor
   addi $18, $0, 115 # w ascii
-  beq $15, $18, sPressionadoCenarioFlor
+  beq $13, $18, sPressionadoCenarioFlor
   addi $18, $0, 83 # W ascii
   
   j continueMovCenarioFlor
@@ -180,17 +184,17 @@ forPularCenarioFlor:
   beq $10, $11, descerPularCenarioFlor
   
   # para poder se mover em quanto pula
-  lw $15, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
-  lw $15, 4($12) # Armazena no $12 a tecla pressionada
+  lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
+  lw $13, 4($12) # Armazena no $12 a tecla pressionada
   
-  beq $15, $13, andarEsquerdaEmPuloCenarioFlor
-  addi $13, $0, 97 # a ascii
-  beq $15, $13, andarEsquerdaEmPuloCenarioFlor
-  addi $13, $0, 65 # A ascii
+  beq $13, $15, andarEsquerdaEmPuloCenarioFlor
+  addi $15, $0, 97 # a ascii
+  beq $13, $15, andarEsquerdaEmPuloCenarioFlor
+  addi $15, $0, 65 # A ascii
   
-  beq $15, $14, andarDireitaEmPuloCenarioFlor
+  beq $13, $14, andarDireitaEmPuloCenarioFlor
   addi $14, $0, 100 # d ascii
-  beq $15, $14, andarDireitaEmPuloCenarioFlor
+  beq $13, $14, andarDireitaEmPuloCenarioFlor
   addi $14, $0, 68 # D ascii
   
 continuePuloCenarioFlor:
@@ -255,17 +259,17 @@ forDescerPularCenarioFlor:
   beq $10, $11, fimQuedaCenarioFlor
   
   # Para poder se mover em quanto cai
-  lw $15, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
-  lw $15, 4($12) # Armazena no $12 a tecla pressionada
+  lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
+  lw $13, 4($12) # Armazena no $12 a tecla pressionada
   
-  beq $15, $13, andarEsquerdaEmQuedaCenarioFlor
-  addi $13, $0, 97 # a ascii
-  beq $15, $13, andarEsquerdaEmQuedaCenarioFlor
-  addi $13, $0, 65 # A ascii
+  beq $13, $15, andarEsquerdaEmQuedaCenarioFlor
+  addi $15, $0, 97 # a ascii
+  beq $13, $15, andarEsquerdaEmQuedaCenarioFlor
+  addi $15, $0, 65 # A ascii
   
-  beq $15, $14, andarDireitaEmQuedaCenarioFlor
+  beq $13, $14, andarDireitaEmQuedaCenarioFlor
   addi $14, $0, 100 # d ascii
-  beq $15, $14, andarDireitaEmQuedaCenarioFlor
+  beq $13, $14, andarDireitaEmQuedaCenarioFlor
   addi $14, $0, 68 # D ascii
   
 continueQuedaCenarioFlor:
