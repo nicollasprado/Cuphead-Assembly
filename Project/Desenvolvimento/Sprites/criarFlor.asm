@@ -15,7 +15,7 @@ fundoCabecaFlor:
   addi $10, $0, 26
   addi $11, $0, 0
   # tamanho das linhas
-  addi $12, $0, 18
+  addi $12, $0, 17
   addi $13, $0, 0
 forFundoCabecaFlor:
   beq $10, $11, lateraisFundoCabecaFlor
@@ -42,7 +42,7 @@ proxLinhaFundoCabecaFlor:
   
   
 testePontoTransparenteFlor:
-  addi $15, $0, 9
+  addi $15, $0, 8
   beq $13, $15, pontoTransparenteFlor
   
   sw $9, 0($8)
@@ -64,7 +64,7 @@ lateraisFundoCabecaFlor:
   # para pintar a direita ao mesmo tempo
   lui $17, 0x1001
   add $17, $17, $4
-  addi $17, $17, 2692
+  addi $17, $17, 2688
   
   # qtd de colunas
   addi $10, $0, 7
@@ -140,7 +140,7 @@ sombrasCabecaFlor:
   sw $9, 1028($8)
   sw $9, 1032($8)
   # direita
-  addi $8, $8, 116
+  addi $8, $8, 112
   sw $9, -516($8)
   sw $9, -520($8)
   sw $9, 0($8)
@@ -159,6 +159,7 @@ sombrasCabecaFlor:
   sw $9, -12($8)
   sw $9, -16($8)
   
+  sw $9, -64($8)
   sw $9, -68($8)
   sw $9, -72($8)
   sw $9, -76($8)
@@ -172,6 +173,7 @@ sombrasCabecaFlor:
   sw $9, -12($8)
   sw $9, -16($8)
   
+  sw $9, -64($8)
   sw $9, -68($8)
   sw $9, -72($8)
   sw $9, -76($8)
@@ -223,7 +225,7 @@ detalhesFundoCabecaFlor:
   addi $10, $0, 14
   addi $11, $0, 0
 forLinhaBaseFundoCabecaFlor:
-  beq $10, $11, end #continueDetalhesFundoCabecaFlor
+  beq $10, $11, detalhesClarosCabecaFlor
   
   sw $9, 0($8)
   addi $8, $8, 4
@@ -232,6 +234,161 @@ forLinhaBaseFundoCabecaFlor:
   j forLinhaBaseFundoCabecaFlor
   
   
+  
+detalhesClarosCabecaFlor:
+  addi $8, $8, -1052
+  
+  # inferior esquerdo
+  lui $14, 0x1001
+  addi $14, $8, -8
+  # superior direito
+  lui $15, 0x1001
+  addi $15, $8, -9216
+  # superior esquerdo
+  lui $16, 0x1001
+  addi $16, $15, -8
+  
+  ori $9, $0, 0xff8629
+  # qtd de colunas
+  addi $10, $0, 7
+  addi $11, $0, 0
+  # tamanho das colunas
+  addi $12, $0, 6
+  addi $13, $0, 0
+forDetalhesClarosCabecaFlor:
+  beq $10, $11, lateraisDetalhesClarosCabecaFlor
+  
+  add $17, $0, $8
+  add $18, $0, $14
+  add $19, $0, $15
+  add $20, $0, $16
+forColunasDetalhesClarosCabecaFlor:
+  beq $12, $13, proxColunaDetalhesClarosCabecaFlor
+
+  sw $9, 0($8)
+  sw $9, 0($14)
+  sw $9, 0($15)
+  sw $9, 0($16)
+  addi $8, $8, -512
+  addi $14, $14, -512
+  addi $15, $15, -512
+  addi $16, $16, -512
+  
+  addi $13, $13, 1
+  j forColunasDetalhesClarosCabecaFlor
+  
+  
+proxColunaDetalhesClarosCabecaFlor:
+  addi $13, $0, 0
+  
+  # testes de mudanças especificas de tamanho
+  beq $11, $0, regOnzeZeroDetalhesClarosCabecaFlor
+  
+  addi $21, $0, 2
+  beq $11, $21, regOnzeDoisDetalhesClarosCabecaFlor
+  
+  addi $21, $0, 4
+  beq $11, $21, regOnzeQuatroDetalhesClarosCabecaFlor
+  
+  
+  addi $8, $17, -508
+  addi $14, $18, -516
+  addi $15, $19, 4
+  addi $16, $20, -4
+  
+  addi $12, $12, -1
+continueProxColunaDetalhesClarosCabecaFlor:
+  addi $11, $11, 1
+  j forDetalhesClarosCabecaFlor
+  
+  
+regOnzeZeroDetalhesClarosCabecaFlor:
+  addi $12, $12, 1
+  
+  addi $8, $17, 516
+  addi $14, $18, 508
+  
+  addi $15, $19, 4
+  addi $16, $20, -4
+  j continueProxColunaDetalhesClarosCabecaFlor
+  
+regOnzeDoisDetalhesClarosCabecaFlor:
+  addi $12, $12, -1
+  
+  addi $8, $17, -1020
+  addi $14, $18, -1028
+  
+  addi $15, $19, 516
+  addi $16, $20, 508
+  j continueProxColunaDetalhesClarosCabecaFlor
+  
+regOnzeQuatroDetalhesClarosCabecaFlor:
+  addi $12, $12, -2
+  
+  addi $8, $17, 4
+  addi $14, $18, -4
+  
+  addi $15, $19, -1020
+  addi $16, $20, -1028
+  j continueProxColunaDetalhesClarosCabecaFlor
+  
+  
+lateraisDetalhesClarosCabecaFlor:
+  addi $8, $8, -512
+  # esquerda
+  lui $16, 0x1001
+  addi $16, $8, -64
+  
+  # qtd de colunas
+  addi $10, $0, 3
+  addi $11, $0, 0
+  # tamanho das colunas
+  addi $12, $0, 3
+  addi $13, $0, 0
+forLateraisDetalhesClarosCabecaFlor:
+  beq $10, $11, end # rostoFlor
+  
+  add $14, $0, $8
+  add $15, $0, $16
+forColunasLateraisDetalhesClarosCabecaFlor:
+  beq $12, $13, proxColunaLateraisDetalhesClarosCabecaFlor
+  
+  sw $9, 0($8)
+  sw $9, 0($16)
+  addi $8, $8, -512
+  addi $16, $16, -512
+  
+  addi $13, $13, 1
+  j forColunasLateraisDetalhesClarosCabecaFlor
+  
+  
+proxColunaLateraisDetalhesClarosCabecaFlor:
+  addi $13, $0, 0
+  
+  beq $11, $0, regOnzeZeroLateraisDetalhesClarosCabecaFlor
+  
+  addi $12, $12, -2
+  addi $8, $14, -516
+  addi $16, $15, -508
+continueProxColunaLateraisDetalhesClarosCabecaFlor:
+  addi $11, $11, 1
+  j forLateraisDetalhesClarosCabecaFlor
+  
+  
+regOnzeZeroLateraisDetalhesClarosCabecaFlor:
+  # parte de cima
+  sw $9, -3072($8)
+  sw $9, -3072($16)
+  sw $9, -3584($8)
+  sw $9, -3584($16)
+  sw $9, -4096($8)
+  sw $9, -4096($16)
+  
+  # ajuste pra proxima coluna
+  addi $12, $12, 9
+  addi $8, $14, -4
+  addi $16, $15, 4
+  j continueProxColunaLateraisDetalhesClarosCabecaFlor
 
 end:
   addi $2, $0, 10
