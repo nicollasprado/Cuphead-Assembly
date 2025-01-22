@@ -346,7 +346,7 @@ lateraisDetalhesClarosCabecaFlor:
   addi $12, $0, 3
   addi $13, $0, 0
 forLateraisDetalhesClarosCabecaFlor:
-  beq $10, $11, end # rostoFlor
+  beq $10, $11, faceFlor
   
   add $14, $0, $8
   add $15, $0, $16
@@ -389,6 +389,171 @@ regOnzeZeroLateraisDetalhesClarosCabecaFlor:
   addi $8, $14, -4
   addi $16, $15, 4
   j continueProxColunaLateraisDetalhesClarosCabecaFlor
+  
+  
+  
+faceFlor:
+  addi $8, $8, 1016
+  ori $9, $0, 0xffd738
+  
+  # qtd de linhas
+  addi $10, $0, 12
+  addi $11, $0, 0
+  # tamanho das linhas
+  addi $12, $0, 7
+  addi $13, $0, 0
+forFaceFlor:
+  beq $10, $11, detalhesFaceFlor
+  
+  add $14, $0, $8
+forLinhaFaceFlor:
+  beq $12, $13, proxLinhaFaceFlor
+  
+  sw $9, 0($8)
+  addi $8, $8, -4
+  
+  addi $13, $13, 1
+  j forLinhaFaceFlor
+  
+  
+proxLinhaFaceFlor:
+  addi $13, $0, 0
+  
+  beq $11, $0, linhaMaisDoisFaceFlor
+  addi $15, $0, 1
+  beq $11, $15, linhaMaisDoisFaceFlor
+  
+  addi $15, $0, 9
+  beq $11, $15, linhaMenosDoisFaceFlor
+  addi $15, $0, 10
+  beq $11, $15, linhaMenosDoisFaceFlor
+  
+  
+  addi $8, $14, -512
+continueProxLinhaFaceFlor:
+  addi $11, $11, 1
+  j forFaceFlor
+  
+  
+linhaMaisDoisFaceFlor:
+  addi $12, $12, 2
+  
+  addi $8, $14, -508
+  j continueProxLinhaFaceFlor
+  
+linhaMenosDoisFaceFlor:
+  addi $12, $12, -2
+  
+  addi $8, $14, -516
+  j continueProxLinhaFaceFlor
+  
+  
+detalhesFaceFlor:
+  addi $8, $8, 1536
+  ori $9, $0, 0xe5c132
+  # sombrancelha
+  # direita
+  sw $9, 0($8)
+  sw $9, -4($8)
+  sw $9, 504($8)
+  #esquerda
+  sw $9, -28($8)
+  sw $9, -24($8)
+  sw $9, 492($8)
+  
+  # olhos
+  ori $9, $0, 0x000000
+  #direita
+  sw $9, 1528($8)
+  sw $9, 2040($8)
+  # esquerda
+  sw $9, 1516($8)
+  sw $9, 2028($8)
+  
+  # nariz
+  ori $9, $0, 0xf1c232
+  sw $9, 2032($8)
+  sw $9, 2544($8)
+  sw $9, 2552($8)
+  
+  # boca
+  addi $8, $8, 2048
+  # branco
+  ori $9, $0, 0xffffff
+  sw $9, 0($8)
+  sw $9, 512($8)
+  sw $9, 1024($8)
+  
+  sw $9, 1016($8)
+  sw $9, 1528($8)
+  
+  sw $9, 1008($8)
+  sw $9, 1520($8)
+  
+  sw $9, 488($8)
+  sw $9, 1000($8)
+  sw $9, 1512($8)
+  # cinza
+  ori $9, $0, 0xd9d9d9
+  sw $9, 508($8)
+  sw $9, 1020($8)
+  sw $9, 1532($8)
+  
+  sw $9, 1524($8)
+  
+  sw $9, 1004($8)
+  sw $9, 1516($8)
+  
+  sw $9, -28($8)
+  sw $9, 484($8)
+  sw $9, 996($8)
+  
+  # detalhe especifico la do topo da cabeca da flor
+  ori $9, $0, 0xff5100
+  addi $8, $8, -7168
+  sw $9, 0($8)
+  sw $9, 4($8)
+  sw $9, -4($8)
+  
+  sw $9, -20($8)
+  sw $9, -24($8)
+  sw $9, -28($8)
+  
+  
+
+cauleFlor:
+  addi $8, $8, 13300
+  ori $9, $0, 0x2aa800
+  
+  sw $9, 0($8)
+  sw $9, 508($8)
+  sw $9, 512($8)
+  sw $9, 516($8)
+  sw $9, 1020($8)
+  sw $9, 1024($8)
+  sw $9, 1028($8)
+  sw $9, 1536($8)
+  sw $9, 1540($8)
+  sw $9, 1544($8)
+  
+  addi $8, $8, 2052
+  
+  # tamanho das colunas
+  addi $10, $0, 7
+  addi $11, $0, 0
+forCauleEspecificoFlor:
+  beq $10, $11, end
+  
+  sw $9, 0($8)
+  sw $9, 4($8)
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forCauleEspecificoFlor
+
+
+
+  
 
 end:
   addi $2, $0, 10
