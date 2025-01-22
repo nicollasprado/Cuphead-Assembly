@@ -589,6 +589,9 @@ detalhesCaldaSereia:
 
 
 retornoDesenharSereia:
+  # reset do argumento
+  addi $4, $0, 0
+
   addi $sp, $sp, 4
   lw $14, 0($sp)
   
