@@ -59,6 +59,18 @@ main:
   addi $12, $12, 4
   sw $0, 0($12)
   
+  # Canto superior esquerdo do tiro index 0
+  addi $12, $12, 4
+  sw $0, 0($12)
+  
+  # Canto superior esquerdo do tiro index 1
+  addi $12, $12, 4
+  sw $0, 0($12)
+  
+  # Canto superior esquerdo do tiro index 2
+  addi $12, $12, 4
+  sw $0, 0($12)
+  
   
   # movimentaçao do personagem
   addi $24, $0, 15360 # $24 => canto superior esquerdo do player
@@ -118,6 +130,9 @@ posMovHorizontalFlor:
   # checa se esta descendo uma plataforma
   addi $15, $0, 3
   beq $3, $15, descerPlataformaCenarioFlor
+  # ataque normal index 0
+  add $4, $0, $24
+  j atacarCenarioFlor
   
   j loopPrincipalCenarioFlor
  
