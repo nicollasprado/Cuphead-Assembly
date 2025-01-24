@@ -123,9 +123,8 @@ posMovHorizontalFlor:
  
   
 sPressionadoCenarioFlor:
-  jal checarColisaoPlataformaCenarioFlor
-  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
-  j posMovHorizontalFlor
+  add $4, $0, $24
+  j descerPlataformaCenarioFlor
   
   
 continueMovCenarioFlor:
@@ -172,8 +171,8 @@ timer:
   sw $20, 0($sp)
   addi $sp, $sp, -4
   
-       
-  addi $20, $0, 20000
+  # velocidade dos ticks do jogo
+  addi $20, $0, 15000
   
 forT:  
   beq $20, $0, fimT

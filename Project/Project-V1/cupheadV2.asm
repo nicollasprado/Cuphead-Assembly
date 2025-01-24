@@ -32,7 +32,6 @@ desenharCuphead:
   addi $sp, $sp, -4
   
   
-  
   lui $8, 0x1001
   add $8, $8, $4
   
