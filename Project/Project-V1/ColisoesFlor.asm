@@ -6,7 +6,7 @@
 # $4 => canto superior esquerdo do personagem
 # $5 => 0 = andou pra esquerda,  1 = andou pra direita
 # Retorno: $3 => 0 se pode andar, 1 se nao pode andar
-# Registradores usados: $10, $11, $15
+# Registradores usados: $10, $11, $13, $15
 
 checarColisaoCenarioFlor:
   sw $31, 0($sp)
@@ -18,9 +18,11 @@ checarColisaoCenarioFlor:
   sw $11, 0($sp)
   addi $sp, $sp, -4
   
-  sw $15, 0($sp)
+  sw $13, 0($sp)
   addi $sp, $sp, -4
   
+  sw $15, 0($sp)
+  addi $sp, $sp, -4
   
   
   addi $3, $0, 0 # pode andar por padrao, o loop que ira modificar caso nao possa
@@ -29,6 +31,22 @@ checarColisaoCenarioFlor:
   
   # se continuar e para checar a direita
   addi $15, $0, -27372
+  
+  # Ajuste para funcionar com diferentes velocidades
+  lui $10, 0x1001
+  addi $10, $10, 65544
+  lw $11, 0($10)    # pega a velocidade do jogador
+  
+  # se o valor da velocidade for par, e necessario dividir por 2 o valor da velocidade antes de multiplicar por 4
+  addi $13, $0, 2
+  div $11, $13
+  mfhi $13
+  
+  beq $13, $0, parColisaoCenarioFlorDireita
+  
+continueColisaoCenarioFlorDireita:
+  mul $11, $11, 4   # ajusta pra qtd de pixels
+  add $4, $4, $11
   
   # checa toda a coluna da tela, se estiver no ultimo pixel da direita, nao pode andar
   addi $10, $0, 128
@@ -41,6 +59,18 @@ forChecarColisaoCenarioFlorDireita:
   
   addi $11, $11, 1
   j forChecarColisaoCenarioFlorDireita
+  
+
+## TODO - Arrumar, provavelmente $13 == 2x($11 / 2)
+parColisaoCenarioFlorDireita:
+  addi $13, $0, 2
+  div $11, $13
+  mflo $13
+  
+  addi $10, $0, -1
+  mul $13, $13, $10
+  add $11, $11, $13
+  j continueColisaoCenarioFlorDireita
   
   
 checarColisaoCenarioFlorEsquerda:
@@ -70,6 +100,9 @@ retornoChecarColisao:
   
   addi $sp, $sp, 4
   lw $15, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $13, 0($sp)
   
   addi $sp, $sp, 4
   lw $11, 0($sp)
@@ -106,7 +139,7 @@ checarColisaoPlataformaCenarioFlor:
   
   # checagem
   addi $3, $0, 1    # começa negado
-  addi $4, $4, 9244 # meio entre os pes do personagem
+  addi $4, $4, 9240 # meio entre os pes do personagem
   
   addi $14, $0, 12544 # inicio da plataforma da direita
   

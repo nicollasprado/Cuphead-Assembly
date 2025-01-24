@@ -9,6 +9,8 @@ Endereços:
 65540 = Dano do jogador
 65544 = Velocidade do jogador
 65548 = Direção que está olhando, 0 = direita, 1 = esquerda
+65552 = Jogador esta pulando?, 0 = sim, 1 = nao, 2 = descendo do pulo, 3 = descendo de uma plataforma
+65556 = contador de pixels do pulo, no fim do pulo deve ser resetado para 0.
 
 
 Tela inicial:
@@ -20,7 +22,12 @@ $22 = Botao escolhido -  0 = fase da flor; 1 = fase da sereia
 $23 = Endereço do inicio do interior do botão da fase da flor
 $24 = Endereço do inicio do inteiro do botão da fase da sereia
 
-
 Cenario:
 $12 = Endereço de inicio do topo do chão (o final é ele + 508)
 $25 = Auxiliar (valores temporarios)
+
+
+
+Persistentes RUN.ASM:
+$12 = Endereço de memoria dos inputs do teclado
+$24 = Endereço do canto superior esquerdo do teclado

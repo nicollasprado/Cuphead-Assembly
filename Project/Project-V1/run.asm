@@ -1,8 +1,5 @@
-.data
-.align 4
-fundoCenarioFlor: .space 396 # armazena 396 bytes para armazenar o fundo antigo, que e exatamente o 18x22 proporcao do personagem
-
 .text
+.globl loopPrincipalCenarioFlor, refazerFundoCenarioFlor, timer, continueMovCenarioFlor, posMovHorizontalFlor
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -35,322 +32,105 @@ main:
   jal criarIndicadorHP
   
   
-loopPrincipalCenarioFlor:
-  addi $24, $0, 15360 # $24 => canto superior esquerdo do player
+#----------------------------------------------#
+#  Definiçao de variaveis iniciais na memoria  #
+  lui $12, 0x1001
+  addi $12, $12, 65540
+  
+  # Dano
+  addi $13, $0, 3
+  sw $13, 0($12)
+  
+  # Velocidade
+  addi $12, $12, 4
+  addi $13, $0, 3 # velocidade
+  sw $13, 0($12)
+  
+  # Direçao que esta olhando
+  addi $12, $12, 4
+  sw $0, 0($12) # 0, direita
+  
+  # Estado de pulo do jogador
+  addi $12, $12, 4
+  addi $13, $0, 1 # nao esta pulando
+  sw $13, 0($12)
+  
+  # Contador da altura do pulo
+  addi $12, $12, 4
+  sw $0, 0($12)
+  
   
   # movimentaçao do personagem
-  lui $12, 0xffff  # Armazena o endereco de memoria que armazena 1 se tiver alguma entrada do teclado e 0 se nao
-  addi $15, $0, 65 # A ascii
-  addi $16, $0, 68 # D ascii
-  addi $17, $0, 87 # W ascii
-  addi $18, $0, 83 # S ascii
+  addi $24, $0, 15360 # $24 => canto superior esquerdo do player
+  
+#----------------------------------------------#
+  
+loopPrincipalCenarioFlor:
+  
 movimentacaoCenarioFlor:
+  lui $12, 0xffff  # Armazena o endereco de memoria que armazena 1 se tiver alguma entrada do teclado e 0 se nao
   lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
-  beq $13, $0, continueMovCenarioFlor
+  beq $13, $0, posMovHorizontalFlor
   
   lw $13, 4($12) # Armazena no $12 a tecla pressionada
   
+  addi $15, $0, 65 # A ascii
   beq $13, $15, andarEsquerdaCenarioFlor
   addi $15, $0, 97 # a ascii
   beq $13, $15, andarEsquerdaCenarioFlor
-  addi $15, $0, 65 # A ascii
   
-  beq $13, $14, andarDireitaCenarioFlor
-  addi $14, $0, 100 # d ascii
-  beq $13, $14, andarDireitaCenarioFlor
-  addi $14, $0, 68 # D ascii
-  
-  beq $13, $17, pularCenarioFlor
-  addi $17, $0, 119 # w ascii
-  beq $13, $17, pularCenarioFlor
-  addi $17, $0, 87 # W ascii
-  
-  beq $13, $18, sPressionadoCenarioFlor
-  addi $18, $0, 115 # w ascii
-  beq $13, $18, sPressionadoCenarioFlor
-  addi $18, $0, 83 # W ascii
-  
-  j continueMovCenarioFlor
-  
-  
-andarEsquerdaCenarioFlor:
-  add $4, $0, $24
-  addi $5, $0, 0
-  jal checarColisaoCenarioFlor
-  
-  bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao diferente de 0 nao pode andar
-
-  # salvar fundo atras do personagem
-  addi $4, $0, 0     # 0 = pintar
-  add $5, $0, $24    # canto superior esquerdo do personagem
-  addi $6, $0, 0     # 0 = andou pra esquerda
-  jal refazerFundoCenarioFlor
-  
-  # pintar fundo atras do personagem
-  addi $4, $0, 1     # 1 = salvar
-  add $5, $0, $24   # canto superior esquerdo do personagem
-  jal refazerFundoCenarioFlor
-  
-  # desenha o personagem
-  addi $4, $24, -4  # endereço do cuphead
-  addi $5, $0, 1    # 1 = olhando pra esquerda
-  jal desenharCuphead
-  
-  lui $22, 0x1001
-  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
-  addi $23, $0, 1     # esquerda
-  sw $23, 0($22)
-  
-  add $24, $0, $4     # atualiza a posiçao do jogador
-  
-  jal checarColisaoPlataformaCenarioFlor
-  
-  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
-  
-  j movimentacaoCenarioFlor
-  
-  
-  
-andarDireitaCenarioFlor:
-  add $4, $0, $24
-  addi $5, $0, 1
-  jal checarColisaoCenarioFlor
-  
-  bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao diferente de 0 nao pode andar
-  
-  # salvar fundo atras do personagem
-  add $5, $0, $24   # 1 pixel antes do canto superior esquerdo do personagem
-  jal refazerFundoCenarioFlor
-  
-  addi $4, $24, 4     # endereço do cuphead
-  addi $5, $0, 0      # 0 = olhando pra direita
-  jal desenharCuphead
-  
-  lui $22, 0x1001
-  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
-  sw $0, 0($22)
-  
-  add $24, $0, $4     # atualiza a posiçao do jogador
-  
-  jal checarColisaoPlataformaCenarioFlor
-  
-  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
-  
-  j movimentacaoCenarioFlor
-  
-  
-descerPlataformaCenarioFlor:
-  # checa se o player esta na altura das plataformas
-  addi $10, $0, 14332 # ultimo pixel a direita na altura das plataformas
-  bgt $24, $10, naoEstaEmPlataformaCenarioFlor
-  
-  # desce o player da plataforma
-  addi $10, $0, 24
-  addi $11, $0, 0
-forDescerPlataformaCenarioFlor:
-  beq $10, $11, movimentacaoCenarioFlor
-  
-  # salvar fundo atras do personagem
-  add $5, $0, $24   # 1 pixel antes do canto superior esquerdo do personagem
-  jal refazerFundoCenarioFlor
-  
-  addi $4, $24, 512 # endereço do cuphead
-  lui $23, 0x1001
-  addi $23, $23, 65548 # endereço que guarda a direçao que esta olhando
-  lw $5, 0($23)     # direçao que esta olhando
-  jal desenharCuphead
-  
-  add $24, $0, $4     # atualiza a posiçao do jogador
-  jal timer
-  addi $11, $11, 1
-  j forDescerPlataformaCenarioFlor
-  
-naoEstaEmPlataformaCenarioFlor:
-  j movimentacaoCenarioFlor
-  
-  
-pularCenarioFlor:
-  #add $4, $0, $24
-  #addi $5, $0, 1
-  #jal checarColisaoCenarioFlor
-  
-  #bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao diferente de 0 nao pode andar
-  
-  # PULO
-  addi $10, $0, 25 # qtd de pixels pra cima
-  addi $11, $0, 0
-  
-forPularCenarioFlor:
-  beq $10, $11, descerPularCenarioFlor
-  
-  # para poder se mover em quanto pula
-  lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
-  lw $13, 4($12) # Armazena no $12 a tecla pressionada
-  
-  beq $13, $15, andarEsquerdaEmPuloCenarioFlor
-  addi $15, $0, 97 # a ascii
-  beq $13, $15, andarEsquerdaEmPuloCenarioFlor
-  addi $15, $0, 65 # A ascii
-  
-  beq $13, $14, andarDireitaEmPuloCenarioFlor
-  addi $14, $0, 100 # d ascii
-  beq $13, $14, andarDireitaEmPuloCenarioFlor
-  addi $14, $0, 68 # D ascii
-  
-continuePuloCenarioFlor:
-  # salvar fundo atras do personagem
-  add $5, $0, $24   # 1 pixel antes do canto superior esquerdo do personagem
-  jal refazerFundoCenarioFlor
-  
-  addi $4, $24, -512    # endereço do cuphead
-  lui $23, 0x1001
-  addi $23, $23, 65548
-  lw $5, 0($23)        # para onde esta olhando
-  jal desenharCuphead
-  
-  add $24, $0, $4     # atualiza a posiçao do jogador
-  
-  jal timer
-  addi $11, $11, 1
-  j forPularCenarioFlor
-  
-  
-andarEsquerdaEmPuloCenarioFlor:
-  addi $4, $24, 512
-  addi $5, $0, 0
-  jal checarColisaoCenarioFlor
-
-  bne $3, $0, continuarPuloCenarioFlor
-  
-  lui $22, 0x1001
-  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
-  addi $23, $0, 1
-  sw $23, 0($22)
-
-  addi $24, $24, -4
-  
-  jal timer
-  j continuePuloCenarioFlor
-  
-andarDireitaEmPuloCenarioFlor:
-  addi $4, $24, 512
-  addi $5, $0, 1
-  jal checarColisaoCenarioFlor
-  
-  bne $3, $0, continuarPuloCenarioFlor
-  
-  lui $22, 0x1001
-  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
-  sw $0, 0($22)
-
-  addi $24, $24, 4
-  
-  jal timer
-  j continuePuloCenarioFlor
-  
-continuarPuloCenarioFlor:
-  j continuePuloCenarioFlor
-  
-  
-
-descerPularCenarioFlor:
-  addi $11, $0, 0
-forDescerPularCenarioFlor:
-  beq $10, $11, fimQuedaCenarioFlor
-  
-  # Para poder se mover em quanto cai
-  lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
-  lw $13, 4($12) # Armazena no $12 a tecla pressionada
-  
-  beq $13, $15, andarEsquerdaEmQuedaCenarioFlor
-  addi $15, $0, 97 # a ascii
-  beq $13, $15, andarEsquerdaEmQuedaCenarioFlor
-  addi $15, $0, 65 # A ascii
-  
-  beq $13, $14, andarDireitaEmQuedaCenarioFlor
-  addi $14, $0, 100 # d ascii
-  beq $13, $14, andarDireitaEmQuedaCenarioFlor
-  addi $14, $0, 68 # D ascii
-  
-continueQuedaCenarioFlor:
-  # salvar fundo atras do personagem
-  addi $4, $0, 1     # 1 = salvar
-  add $5, $0, $24   # 1 pixel antes do canto superior esquerdo do personagem
-  jal refazerFundoCenarioFlor
-  
-  addi $4, $24, 512     # endereço do cuphead
-  lui $23, 0x1001
-  addi $23, $23, 65548
-  lw $5, 0($23)      # direçao que esta olhando
-  jal desenharCuphead
-  
-  add $24, $0, $4     # atualiza a posiçao do jogador
-  
-  # reg 4 ja esta sendo alterado na funcao entao nao tem que especificar
-  jal checarColisaoPlataformaCenarioFlor
-  
-  beq $3, $0, subiuPlataformaPulo
-  
-  jal timer
-  addi $11, $11, 1
-  j forDescerPularCenarioFlor
-  
-  
-subiuPlataformaPulo:
-  j movimentacaoCenarioFlor
-  
-  
-andarEsquerdaEmQuedaCenarioFlor:
-  addi $4, $24, -512
-  addi $5, $0, 0
-  jal checarColisaoCenarioFlor
-  
-  bne $3, $0, continuarQuedaCenarioFlor
-  
-  lui $22, 0x1001
-  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
-  addi $23, $0, 1     # esquerda
-  sw $23, 0($22)
-
-  addi $24, $24, -4
-  
-  jal timer
-  j continueQuedaCenarioFlor
-  
-andarDireitaEmQuedaCenarioFlor:
-  addi $4, $24, -512
-  addi $5, $0, 1
-  jal checarColisaoCenarioFlor
-  
-  bne $3, $0, continuarQuedaCenarioFlor
-  
-  lui $22, 0x1001
-  addi $22, $22, 65548 # endereço que guarda a direçao que esta olhando
-  sw $0, 0($22)
-
-  addi $24, $24, 4
-  
-  jal timer
-  j continueQuedaCenarioFlor
-  
-continuarQuedaCenarioFlor:
-  j continueQuedaCenarioFlor
-  
-fimQuedaCenarioFlor:
-  jal checarColisaoPlataformaCenarioFlor
-  bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
-  j movimentacaoCenarioFlor
-  
-  
+  addi $15, $0, 68 # D ascii
+  beq $13, $15, andarDireitaCenarioFlor
+  addi $15, $0, 100 # d ascii
+  beq $13, $15, andarDireitaCenarioFlor
+  
+  # checa se ja esta descendo de uma plataforma
+  jal checarPuloCenarioFlor
+  addi $15, $0, 3
+  beq $3, $15, posMovHorizontalFlor
+  
+  addi $15, $0, 83 # S ascii
+  beq $13, $15, sPressionadoCenarioFlor
+  addi $15, $0, 115 # s ascii
+  beq $13, $15, sPressionadoCenarioFlor
+  
+  # checa se ja esta pulando
+  jal checarPuloCenarioFlor
+  beq $3, $0, posMovHorizontalFlor
+  # checa se ja esta descendo de um pulo
+  jal checarPuloCenarioFlor
+  addi $15, $0, 2
+  beq $3, $15, posMovHorizontalFlor
+  
+  addi $15, $0, 87 # W ascii
+  beq $13, $15, pularCenarioFlor
+  addi $15, $0, 119 # w ascii
+  beq $13, $15, pularCenarioFlor
+  
+# --------------------------------------#
+posMovHorizontalFlor:
+  # checa se esta pulando
+  jal checarPuloCenarioFlor
+  beq $3, $0, pularCenarioFlor
+  # checa se esta em queda
+  addi $15, $0, 2
+  beq $3, $15, descerPularCenarioFlor
+  # checa se esta descendo uma plataforma
+  addi $15, $0, 3
+  beq $3, $15, descerPlataformaCenarioFlor
+  
+  j loopPrincipalCenarioFlor
+ 
   
 sPressionadoCenarioFlor:
   jal checarColisaoPlataformaCenarioFlor
   bne $3, $0, descerPlataformaCenarioFlor # se retornar 1 o personagem nao esta em uma plataforma
-  j movimentacaoCenarioFlor
+  j posMovHorizontalFlor
   
   
 continueMovCenarioFlor:
-  j movimentacaoCenarioFlor
+  jal timer
+  j loopPrincipalCenarioFlor
   
   
   
@@ -409,6 +189,7 @@ fimT:
   addi $sp, $sp, 4                                                    
   lw $31, 0($sp)          
   jr $31
+
 
 #####################
 # funçao para desenhar o cenario atras quando o personagem se move
@@ -486,6 +267,8 @@ proxLinhaPintarFundoAntigoCenarioFlor:
   
   
 retornoFundoCenarioFlor:
+  addi $5, $0, 0
+
   addi $sp, $sp, 4
   lw $23, 0($sp)
   
@@ -510,3 +293,4 @@ retornoFundoCenarioFlor:
   addi $sp, $sp, 4
   lw $31, 0($sp)
   jr $31
+ 
