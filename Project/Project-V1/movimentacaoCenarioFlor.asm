@@ -114,7 +114,7 @@ andarDireitaCenarioFlor:
 
 saiuPlataformaAndandoHorizontalCenarioFlor:
   addi $5, $0, 1
-  j descerPlataformaCenarioFlor # se retornar 1 o personagem encostou em um vao entre plataformas
+  j descerPlataformaCenarioFlor
   
   
   
@@ -217,6 +217,7 @@ descerPularCenarioFlor:
   
   add $24, $0, $4     # atualiza a posiçao do jogador
   
+  # checa se o jogador caiu em cima de uma plataforma
   jal checarColisaoPlataformaCenarioFlor
   beq $3, $0, subiuPlataformaPulo
   
@@ -255,15 +256,15 @@ subiuPlataformaPulo:
   j continueMovCenarioFlor
   
 fimQuedaCenarioFlor:
-  # checa se o jogador caiu em cima de um vao entre plataformas
-  jal checarColisaoLateraisPlataformasCenarioFlor
-  bne $3, $0, saiuPlataformaAndandoHorizontalCenarioFlor # se retornar 1 o personagem encostou em um vao entre plataformas
-  
   # atualiza o estado de pulo do jogador
   lui $10, 0x1001
   addi $10, $10, 65552
   addi $11, $0, 1
   sw $11, 0($10)
+  
+  # checa se o jogador caiu em cima de um vao entre plataformas
+  jal checarColisaoLateraisPlataformasCenarioFlor
+  bne $3, $0, saiuPlataformaAndandoHorizontalCenarioFlor # se retornar 1 o personagem encostou em um vao entre plataformas
   
   
   addi $sp, $sp, 4
@@ -311,6 +312,7 @@ continueDescerPlataformaCenarioFlor:
   # atualiza o estado do jogador para descendo de plataforma
   lui $10, 0x1001
   addi $10, $10, 65552
+  addi $13, $0, 3 # estado de descendo plataforma
   sw $13, 0($10) # estado de descendo plataforma
   
   # pega a altura do jogador
