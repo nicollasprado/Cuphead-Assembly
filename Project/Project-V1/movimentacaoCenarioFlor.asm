@@ -22,7 +22,7 @@ andarEsquerdaCenarioFlor:
   addi $5, $0, 0
   jal checarColisaoCenarioFlor
   
-  bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao diferente de 0 nao pode andar
+  bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao for diferente de 0 nao pode andar
   
   # pintar fundo atras do personagem
   add $5, $0, $24   # canto superior esquerdo do personagem
@@ -340,9 +340,6 @@ continueDescerPlataformaCenarioFlor:
   addi $13, $13, 1
   sw $13, 0($10)
   
-  
-  # reset dos registradores
-  addi $5, $0, 0
   
   addi $sp, $sp, 4
   lw $14, 0($sp)

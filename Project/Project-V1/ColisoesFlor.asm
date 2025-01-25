@@ -368,7 +368,7 @@ retornoChecarColisaoPlataformaCenarioFlor:
 #####################
 # funçao para checar as colisoes dos tiros normais
 # $4 => canto superior esquerdo do tiro
-# $5 => 0 = indo pra esquerda,  1 = indo pra direita
+# $5 => 1 = indo pra esquerda,  0 = indo pra direita
 # Retorno: $3 => 0 ainda nao colidiu com nenhuma parede, 1 colidiu em uma parede
 # Registradores usados: $10, $11, $15
 
@@ -388,13 +388,10 @@ checarColisaoTirosParedesCenarioFlor:
   
   addi $3, $0, 0 # pode se deslocar por padrao, o loop que ira modificar caso nao possa
   
-  beq $5, $0, checarColisaoTirosParedesCenarioFlorEsquerda
+  bne $5, $0, checarColisaoTirosParedesCenarioFlorEsquerda
   
   # se continuar e para checar a direita
-  addi $15, $0, -27372 # coluna em relacao ao 0x10010000
-  
-  # O tiro se desloca de 2 em dois entao temos que aumentar o valor a ser checado pra prever se vai bater na parede invisivel
-  add $4, $4, 24
+  addi $15, $0, 340 # coluna em relacao ao 0x10010000
   
   # checa toda a coluna da tela da direita, se detectar colisao, evita de se mover e retorna 1
   addi $10, $0, 128 # qtd de pixels (aumentando de 1 em 1, se fosse de 4 em 4 seria 512)
@@ -402,7 +399,7 @@ checarColisaoTirosParedesCenarioFlor:
 forChecarColisaoTirosCenarioFlorDireita:
   beq $10, $11, retornoChecarColisaoTirosCenarioFlor
   
-  bge $4, $15, colisaoTirosDetectadaCenarioFlor
+  beq $4, $15, colisaoTirosDetectadaCenarioFlor
   addi $15, $15, 512
   
   addi $11, $11, 1
@@ -412,15 +409,15 @@ forChecarColisaoTirosCenarioFlorDireita:
   
   
 checarColisaoTirosParedesCenarioFlorEsquerda:
-  addi $15, $0, -32768
+  addi $15, $0, -12 # coluna em relacao ao 0x10010000
   
-  # checa toda a coluna da tela, se estiver no ultimo pixel da direita, nao pode andar
+  # checa toda a coluna da tela, se estiver no ultimo pixel da direita, nao pode continuar
   addi $10, $0, 128
   addi $11, $0, 0
 forChecarColisaoTirosCenarioFlorEsquerda:
   beq $10, $11, retornoChecarColisaoTirosCenarioFlor
   
-  beq $15, $4, colisaoTirosDetectadaCenarioFlor
+  beq $4, $15, colisaoTirosDetectadaCenarioFlor
   addi $15, $15, 512
   
   addi $11, $11, 1
@@ -432,10 +429,6 @@ colisaoTirosDetectadaCenarioFlor:
   j retornoChecarColisaoTirosCenarioFlor
   
 retornoChecarColisaoTirosCenarioFlor:
-  # reset das propriedades da funçao
-  addi $4, $0, 0
-  addi $5, $0, 0
-  
   addi $sp, $sp, 4
   lw $15, 0($sp)
   

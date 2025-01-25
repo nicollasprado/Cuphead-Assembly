@@ -1,5 +1,5 @@
 .text
-.globl loopPrincipalCenarioFlor, refazerFundoCenarioFlor, timer, continueMovCenarioFlor, posMovHorizontalFlor
+.globl refazerFundoCenarioFlor, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -121,6 +121,10 @@ movimentacaoCenarioFlor:
   
 # --------------------------------------#
 posMovHorizontalFlor:
+  # ataque normal index 0
+  add $4, $0, $24
+  j atacarCenarioFlor
+posAtaqueNormalCenarioFlor:
   # checa se esta pulando
   jal checarPuloCenarioFlor
   beq $3, $0, pularCenarioFlor
@@ -130,9 +134,6 @@ posMovHorizontalFlor:
   # checa se esta descendo uma plataforma
   addi $15, $0, 3
   beq $3, $15, descerPlataformaCenarioFlor
-  # ataque normal index 0
-  add $4, $0, $24
-  j atacarCenarioFlor
   
   j loopPrincipalCenarioFlor
  
@@ -145,6 +146,10 @@ sPressionadoCenarioFlor:
 continueMovCenarioFlor:
   jal timer
   j loopPrincipalCenarioFlor
+  
+continueAtaqueNormalCenarioFlor:
+  jal timerAtaque
+  j posAtaqueNormalCenarioFlor
   
   
   
@@ -187,7 +192,7 @@ timer:
   addi $sp, $sp, -4
   
   # velocidade dos ticks do jogo
-  addi $20, $0, 15000
+  addi $20, $0, 2500
   
 forT:  
   beq $20, $0, fimT
@@ -197,6 +202,35 @@ forT:
   j forT    
                 
 fimT:  
+  addi $sp, $sp, 4                                                    
+  lw $20, 0($sp)
+
+  addi $sp, $sp, 4                                                    
+  lw $31, 0($sp)          
+  jr $31
+  
+
+######################
+# função Timer
+
+timerAtaque: 
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+       
+  sw $20, 0($sp)
+  addi $sp, $sp, -4
+  
+  # velocidade dos ticks do jogo
+  addi $20, $0, 5000
+  
+forTA:  
+  beq $20, $0, fimT
+  nop
+  nop
+  addi $20, $20, -1      
+  j forTA  
+                
+fimTA:  
   addi $sp, $sp, 4                                                    
   lw $20, 0($sp)
 
