@@ -1,5 +1,5 @@
 .text
-.globl refazerFundoCenarioFlor, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor
+.globl continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -59,17 +59,18 @@ main:
   addi $12, $12, 4
   sw $0, 0($12)
   
-  # Canto superior esquerdo do tiro index 0
+  # Canto superior esquerdo do tiro do jogador
   addi $12, $12, 4
   sw $0, 0($12)
   
-  # Canto superior esquerdo do tiro index 1
+  # Direçao do tiro do jogador
   addi $12, $12, 4
-  sw $0, 0($12)
+  sw $0, 0($12) # comeca com 0 = pra direita
   
-  # Canto superior esquerdo do tiro index 2
+  # Vida do jogador
   addi $12, $12, 4
-  sw $0, 0($12)
+  addi $13, $0, 3 # começa com 3
+  sw $13, 0($12)
   
   
   # movimentaçao do personagem
@@ -192,7 +193,7 @@ timer:
   addi $sp, $sp, -4
   
   # velocidade dos ticks do jogo
-  addi $20, $0, 2500
+  addi $20, $0, 5000
   
 forT:  
   beq $20, $0, fimT
@@ -236,109 +237,5 @@ fimTA:
 
   addi $sp, $sp, 4                                                    
   lw $31, 0($sp)          
-  jr $31
-
-
-#####################
-# funçao para desenhar o cenario atras quando o personagem se move
-# Essa funçao pinta o fundo com o que era o cenario, depois disso e necessario chamar a funcao que pinta o persongaem novamente na nova posicao
-# $5 => canto superior esquerdo do personagem
-# Registradores usados: $10, $11, $13, $14, $20, $21, $23
-
-refazerFundoCenarioFlor:
-  sw $31, 0($sp)
-  addi $sp, $sp, -4
-  
-  sw $10, 0($sp)
-  addi $sp, $sp, -4
-  
-  sw $11, 0($sp)
-  addi $sp, $sp, -4
-  
-  sw $13, 0($sp)
-  addi $sp, $sp, -4
-  
-  sw $14, 0($sp)
-  addi $sp, $sp, -4
-  
-  sw $20, 0($sp)
-  addi $sp, $sp, -4
-  
-  sw $21, 0($sp)
-  addi $sp, $sp, -4
-  
-  sw $23, 0($sp)
-  addi $sp, $sp, -4
-  
-  # Inicio do cenario copiado na memoria
-  lui $23, 0x1001
-  addi $23, $23, 32764
-  add $23, $23, $5
-  
-  # endereço da posicao a ser refeita
-  add $21, $5, -4
-  lui $5, 0x1001
-  add $5, $5, $21
-  
-continuePintarFundoCenarioFlor:
-  # qtd de linhas
-  addi $10, $0, 23
-  addi $11, $0, 0
-  # tamanho das linhas
-  addi $13, $0, 20
-  addi $14, $0, 0
-forPintarFundoAntigoCenarioFlor:
-  beq $10, $11, retornoFundoCenarioFlor
-  
-  add $20, $0, $23 # salva o inicio da linha do mapa copiado
-  add $21, $0, $5 # salva o inicio da linha da posicao a ser refeita
-forPintarLinhasFundoAntigoCenarioFlor:
-  beq $13, $14, proxLinhaPintarFundoAntigoCenarioFlor
-  
-  lw $9, 0($23)
-  sw $9, 0($5)
-  addi $5, $5, 4
-  addi $23, $23, 4
-  
-  addi $14, $14, 1
-  j forPintarLinhasFundoAntigoCenarioFlor
-  
-proxLinhaPintarFundoAntigoCenarioFlor:
-  addi $14, $0, 0
-  
-  # proxima linha
-  addi $5, $21, 512
-  addi $23, $20, 512
-  
-  addi $11, $11, 1
-  j forPintarFundoAntigoCenarioFlor
-  
-  
-retornoFundoCenarioFlor:
-  addi $5, $0, 0
-
-  addi $sp, $sp, 4
-  lw $23, 0($sp)
-  
-  addi $sp, $sp, 4
-  lw $21, 0($sp)
-  
-  addi $sp, $sp, 4
-  lw $20, 0($sp)
-  
-  addi $sp, $sp, 4
-  lw $14, 0($sp)  
-  
-  addi $sp, $sp, 4
-  lw $13, 0($sp)
-  
-  addi $sp, $sp, 4
-  lw $11, 0($sp)
-  
-  addi $sp, $sp, 4
-  lw $10, 0($sp)
-      
-  addi $sp, $sp, 4
-  lw $31, 0($sp)
   jr $31
  

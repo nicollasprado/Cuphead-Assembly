@@ -441,3 +441,113 @@ retornoChecarColisaoTirosCenarioFlor:
   addi $sp, $sp, 4
   lw $31, 0($sp)
   jr $31
+  
+  
+  
+  
+#####################
+# funçao para checar as colisoes dos ataques horizontais da flor com a parede invisivel da esquerda
+# $4 => canto superior esquerdo do ataque
+# Retorno: $3 => 0 = encostou na parede invisivel, 1 = nao encostou
+# Registradores usados: $9, $10, $11
+
+checarColisaoAtqHorizFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $9, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $10, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $11, 0($sp)
+  addi $sp, $sp, -4
+  
+  
+  addi $3, $0, 1 # começa negado
+  
+  addi $9, $0, 0 # endereço inicial da coluna esquerda
+  
+  # altura da coluna
+  addi $10, $0, 128
+  addi $11, $0, 0
+forChecarColisaoAtqHorizFlor:
+  beq $10, $11, retornoChecarColisaoAtqHorizFlor
+  
+  beq $4, $9, colisaoDetectadaAtqHorizFlor
+  addi $9, $9, 512
+  
+  addi $11, $11, 1
+  j forChecarColisaoAtqHorizFlor
+  
+colisaoDetectadaAtqHorizFlor:
+  add $3, $0, $0,
+  j retornoChecarColisaoAtqHorizFlor
+  
+retornoChecarColisaoAtqHorizFlor:
+  addi $sp, $sp, 4
+  lw $11, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $10, 0($sp)
+  
+  sw $9, 0($sp)
+  addi $sp, $sp, -4
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
+  
+  
+  
+  
+#####################
+# funçao para checar as colisoes dos ataques de pinha da flor com o cuphead
+# $4 => canto superior esquerdo do ataque
+# $5 => canto superior esquerdo do cuphead
+# Retorno: $3 => 0 = encostou no cuphead, 1 = nao encostou
+# Registradores usados: $10, $11
+
+checarColisaoPinhaCupheadFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $10, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $11, 0($sp)
+  addi $sp, $sp, -4
+  
+  
+  addi $3, $0, 1 # começa negado
+  
+  addi $5, $5, 72 # ajuste pra pegar o canto superior direito do cuphead
+  
+  # tamanho do cuphead
+  addi $10, $0, 22
+  addi $11, $0, 0
+forChecarColisaoPinhaCupheadFlor:
+  beq $10, $11, retornoChecarColisaoAtqHorizFlor
+  
+  beq $4, $5, colisaoDetectadaAtqPinhaCupheadFlor
+  addi $5, $5, 512
+  
+  addi $11, $11, 1
+  j forChecarColisaoAtqHorizFlor
+  
+colisaoDetectadaAtqPinhaCupheadFlor:
+  add $3, $0, $0,
+  j retornoChecarColisaoAtqPinhaCupheadFlor
+  
+retornoChecarColisaoAtqPinhaCupheadFlor:
+  addi $sp, $sp, 4
+  lw $11, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $10, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
+  

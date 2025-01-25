@@ -13,6 +13,11 @@ Endereços:
 65556 = Contador de pixels do pulo, no fim do pulo deve ser resetado para 0.
 65560 = Canto superior esquerdo do tiro index 0
 65564 = Direção atual do tiro, 1 = esquerda, 0 = direita
+65568 = Vida do jogador
+
+Endereços da flor:
+65572 = Contador para usar o ataque de pinha novamente
+65576 = Endereço que esta o ataque de pinha
 
 
 Tela inicial:
