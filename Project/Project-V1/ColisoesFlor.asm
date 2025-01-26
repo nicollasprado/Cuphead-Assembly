@@ -1,6 +1,6 @@
 .text
 .globl checarColisaoCenarioFlor, checarColisaoPlataformaCenarioFlor, checarColisaoLateraisPlataformasCenarioFlor, checarColisaoTirosParedesCenarioFlor
-.globl checarColisaoAtqHorizFlor, checarColisaoPinhaCupheadFlor
+.globl checarColisaoAtqHorizFlor, checarColisaoPinhaCupheadFlor, checarColisaoAtqMisselChaoFlor, checarColisaoMisselCupheadFlor
 
 #####################
 # funçao para checar as colisoes do personagem principal
@@ -483,7 +483,7 @@ forChecarColisaoAtqHorizFlor:
   j forChecarColisaoAtqHorizFlor
   
 colisaoDetectadaAtqHorizFlor:
-  add $3, $0, $0,
+  add $3, $0, $0
   j retornoChecarColisaoAtqHorizFlor
   
 retornoChecarColisaoAtqHorizFlor:
@@ -552,3 +552,92 @@ retornoChecarColisaoAtqPinhaCupheadFlor:
   lw $31, 0($sp)
   jr $31
   
+  
+  
+#######################
+# funçao para checar as colisoes do ataque missel da flor com o chao
+# $4 => canto superior esquerdo do ataque
+# Retorno: $3 => 0 = encostou no chao, 1 = nao encostou
+# Registradores usados: $9
+
+checarColisaoAtqMisselChaoFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $9, 0($sp)
+  addi $sp, $sp, -4
+  
+  
+  addi $3, $0, 1 # começa negado
+  
+  addi $4, $4, 4608  # canto inferior esquerdo do ataque
+  
+  addi $9, $0, 26624 # canto esquerdo do chao
+  bge $4, $9, colisaoDetectadaMisselChaoFlor
+  
+  j retornoChecarColisaoMisselChaoFlor
+  
+colisaoDetectadaMisselChaoFlor:
+  add $3, $0, $0
+  j retornoChecarColisaoMisselChaoFlor
+  
+retornoChecarColisaoMisselChaoFlor:
+  addi $sp, $sp, 4
+  lw $9, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
+  
+  
+  
+  
+#####################
+# funçao para checar as colisoes dos ataques de missel da flor com o cuphead
+# $4 => canto superior esquerdo do ataque
+# $5 => canto superior esquerdo do cuphead
+# Retorno: $3 => 0 = encostou no cuphead, 1 = nao encostou
+# Registradores usados: $10, $11
+
+checarColisaoMisselCupheadFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $10, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $11, 0($sp)
+  addi $sp, $sp, -4
+  
+  
+  addi $3, $0, 1 # começa negado
+  
+  # ajuste necessario
+  addi $5, $5, -4096
+  
+  # largura do cuphead
+  addi $10, $0, 18
+  addi $11, $0, 0
+forChecarColisaoMisselCupheadFlor:
+  beq $10, $11, retornoChecarColisaoMisselCupheadFlor
+  
+  beq $4, $5, colisaoDetectadaMisselCupheadFlor
+  addi $5, $5, 4
+  
+  addi $11, $11, 1
+  j forChecarColisaoMisselCupheadFlor
+  
+colisaoDetectadaMisselCupheadFlor:
+  add $3, $0, $0
+  j retornoChecarColisaoMisselCupheadFlor
+  
+retornoChecarColisaoMisselCupheadFlor:
+  addi $sp, $sp, 4
+  lw $11, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $10, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31

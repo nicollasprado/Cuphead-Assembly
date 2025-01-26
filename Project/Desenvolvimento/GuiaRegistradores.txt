@@ -19,6 +19,11 @@ Endereços da flor:
 65572 = Contador para usar o ataque de pinha novamente
 65576 = Endereço que esta o ataque de pinha
 
+65580 = Contador para usar o ataque missel novamente
+65584 = Endereço que esta o ataque missel
+65588 = Contador pro segura missel soltar o missel
+65592 = Endereço que esta o segura missel
+
 
 Tela inicial:
 $16 = Armazenamento de valores ascii
@@ -49,4 +54,13 @@ Copy paste para testes:
   addi $2, $0, 1
   syscall
   add $9, $0, $23
+  # teste #######
+
+
+# teste #######
+  add $23, $0, $4
+  add $4, $0, 2
+  addi $2, $0, 1
+  syscall
+  add $4, $0, $23
   # teste #######

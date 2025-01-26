@@ -298,17 +298,6 @@ restoRostoCupheadEsq:
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 desenharCupheadDireita:
   # Canudo
   # branco

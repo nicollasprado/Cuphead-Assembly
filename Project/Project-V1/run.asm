@@ -81,6 +81,20 @@ main:
   addi $12, $12, 4
   sw $0, 0($12)
   
+  # Cooldown do ataque missel da flor
+  addi $12, $12, 4
+  addi $13, $0, -20 # cooldown inicial de -10
+  sw $13, 0($12)
+  
+  # Endereço que esta o ataque missel
+  addi $12, $12, 4
+  addi $13, $0, -1
+  sw $13, 0($12)
+  
+  # Cooldown pra o segura missel soltar o missel
+  addi $12, $12, 4
+  sw $0, 0($12)
+  
   
   # movimentaçao do personagem
   addi $24, $0, 15360 # $24 => canto superior esquerdo do player
@@ -239,7 +253,7 @@ timerAtaque:
   addi $sp, $sp, -4
   
   # velocidade dos ticks do jogo
-  addi $20, $0, 5000
+  addi $20, $0, 10000
   
 forTA:  
   beq $20, $0, fimT

@@ -21,7 +21,6 @@ andarEsquerdaCenarioFlor:
   add $4, $0, $24
   addi $5, $0, 0
   jal checarColisaoCenarioFlor
-  
   bne $3, $0, continueMovCenarioFlor # se o retorno da checagem de colisao for diferente de 0 nao pode andar
   
   # pintar fundo atras do personagem
