@@ -1,5 +1,5 @@
 .text
-.globl continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor
+.globl continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -72,6 +72,15 @@ main:
   addi $13, $0, 3 # começa com 3
   sw $13, 0($12)
   
+  # Cooldown do ataque de pinha da flor
+  addi $12, $12, 4
+  addi $13, $0, -10 # cooldown inicial de -10
+  sw $13, 0($12)
+  
+  # Endereço que esta o ataque de pinha
+  addi $12, $12, 4
+  sw $0, 0($12)
+  
   
   # movimentaçao do personagem
   addi $24, $0, 15360 # $24 => canto superior esquerdo do player
@@ -126,6 +135,8 @@ posMovHorizontalFlor:
   add $4, $0, $24
   j atacarCenarioFlor
 posAtaqueNormalCenarioFlor:
+  j logicaFlor
+posAtaqueFlor:
   # checa se esta pulando
   jal checarPuloCenarioFlor
   beq $3, $0, pularCenarioFlor
@@ -139,6 +150,8 @@ posAtaqueNormalCenarioFlor:
   j loopPrincipalCenarioFlor
  
   
+  
+  
 sPressionadoCenarioFlor:
   add $4, $0, $24
   j descerPlataformaCenarioFlor
@@ -149,8 +162,12 @@ continueMovCenarioFlor:
   j loopPrincipalCenarioFlor
   
 continueAtaqueNormalCenarioFlor:
-  jal timerAtaque
+  jal timer
   j posAtaqueNormalCenarioFlor
+  
+continueAtaqueFlor:
+  jal timer
+  j posAtaqueFlor
   
   
   
@@ -183,7 +200,7 @@ end:
   
   
 ######################
-# função Timer
+# função Timer para o ataque princial do cuphead
 
 timer: 
   sw $31, 0($sp)

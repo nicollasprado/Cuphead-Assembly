@@ -1,5 +1,5 @@
 .text
-.globl ataquePinhaFlor
+.globl ataquePinhaFlor, desfazerAtaquePinhaFlor
 
 # $4 -> canto superior esquerdo do ataque
 # Reg utilizados: $8, $9
@@ -67,6 +67,90 @@ ataquePinhaFlor:
   sw $9, 2084($8)
   sw $9, 2088($8)
   
+  # retorno
+  addi $sp, $sp, 4
+  lw $9, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $8, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
+  
+  
+  
+#####################
+# funçao para desfazer o ataque pinha da tela
+# $4 => canto superior esquerdo do ataque
+# Registradores usados: $8, $9, $10, $11, $13
+
+desfazerAtaquePinhaFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+
+  sw $8, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $9, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $10, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $11, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $13, 0($sp)
+  addi $sp, $sp, -4
+  
+  
+  # ponteiro pro cenario principal
+  lui $8, 0x1001
+  add $8, $8, $4
+  
+  # ponteiro pra copia
+  lui $9, 0x1001
+  add $9, $9, $4
+  addi $9, $9, 32768
+  
+  # tamanho das linhas
+  addi $10, $0, 12
+  addi $11, $0, 0
+forDesfazerAtaquePinhaFlor:
+  beq $10, $11, retornoDesfazerAtaquePinhaFlor
+  
+  lw $13, 0($9)
+  sw $13, 0($8)
+  
+  lw $13, 512($9)
+  sw $13, 512($8)
+  
+  lw $13, 1024($9)
+  sw $13, 1024($8)
+  
+  lw $13, 1536($9)
+  sw $13, 1536($8)
+  
+  lw $13, 2048($9)
+  sw $13, 2048($8)
+  
+  addi $9, $9, 4
+  addi $8, $8, 4
+  
+  addi $11, $11, 1
+  j forDesfazerAtaquePinhaFlor
+  
+retornoDesfazerAtaquePinhaFlor:
+  addi $sp, $sp, 4
+  lw $13, 0($sp)
+
+  addi $sp, $sp, 4
+  lw $11, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $10, 0($sp)
+
   addi $sp, $sp, 4
   lw $9, 0($sp)
   

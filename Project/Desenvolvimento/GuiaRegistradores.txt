@@ -38,3 +38,15 @@ $25 = Auxiliar (valores temporarios)
 Persistentes RUN.ASM:
 $12 = Endereço de memoria dos inputs do teclado
 $24 = Endereço do canto superior esquerdo do teclado
+
+
+
+Copy paste para testes:
+
+# teste #######
+  add $23, $0, $9
+  add $4, $0, $9
+  addi $2, $0, 1
+  syscall
+  add $9, $0, $23
+  # teste #######

@@ -1,5 +1,6 @@
 .text
 .globl checarColisaoCenarioFlor, checarColisaoPlataformaCenarioFlor, checarColisaoLateraisPlataformasCenarioFlor, checarColisaoTirosParedesCenarioFlor
+.globl checarColisaoAtqHorizFlor, checarColisaoPinhaCupheadFlor
 
 #####################
 # funçao para checar as colisoes do personagem principal
@@ -492,8 +493,8 @@ retornoChecarColisaoAtqHorizFlor:
   addi $sp, $sp, 4
   lw $10, 0($sp)
   
-  sw $9, 0($sp)
-  addi $sp, $sp, -4
+  addi $sp, $sp, 4
+  lw $9, 0($sp)
   
   addi $sp, $sp, 4
   lw $31, 0($sp)
@@ -528,13 +529,13 @@ checarColisaoPinhaCupheadFlor:
   addi $10, $0, 22
   addi $11, $0, 0
 forChecarColisaoPinhaCupheadFlor:
-  beq $10, $11, retornoChecarColisaoAtqHorizFlor
+  beq $10, $11, retornoChecarColisaoAtqPinhaCupheadFlor
   
   beq $4, $5, colisaoDetectadaAtqPinhaCupheadFlor
   addi $5, $5, 512
   
   addi $11, $11, 1
-  j forChecarColisaoAtqHorizFlor
+  j forChecarColisaoPinhaCupheadFlor
   
 colisaoDetectadaAtqPinhaCupheadFlor:
   add $3, $0, $0,
