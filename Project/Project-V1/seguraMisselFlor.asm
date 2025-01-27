@@ -22,6 +22,7 @@ seguraMisselFlor:
   
   lui $8, 0x1001
   add $8, $8, $4
+  addi $8, $8, 512
   
   # Asa esquerda
   ori $9, $0, 0x259600
@@ -131,11 +132,13 @@ desfazerSeguraMisselFlor:
   # ponteiro pro cenario principal
   lui $8, 0x1001
   add $8, $8, $4
+  addi $8, $8, 512
   
   # ponteiro pra copia
   lui $9, 0x1001
-  add $9, $9, $4
   addi $9, $9, 32768
+  add $9, $9, $4
+  addi $9, $9, 512
   
   # tamanho das linhas
   addi $10, $0, 14

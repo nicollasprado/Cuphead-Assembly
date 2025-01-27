@@ -1,5 +1,5 @@
 .text
-.globl continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor
+.globl main, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -27,7 +27,6 @@ main:
   lui $10, 0x1001
   addi $10, $10, 65548 # endereço que guarda a direçao que esta olhando
   sw $0, 0($10)
-  
   
   jal criarIndicadorHP
   

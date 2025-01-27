@@ -185,7 +185,7 @@ desenharNumeroHpAjustarHpCuphead:
   ori $9, $0, 0x000000
   
   # checagem pra desenhar a vida atual do jogador
-  beq $13, $0, retornoAjustarHpCuphead
+  beq $13, $0, rParaVoltarProMenu
   
   addi $10, $0, 2
   beq $13, $10, desenharNumeroDoisHpAjustarHpCuphead
