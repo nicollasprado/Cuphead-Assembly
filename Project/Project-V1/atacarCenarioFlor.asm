@@ -76,7 +76,7 @@ continueAtacarCenarioFlorIndexZero:
   
 atacarCenarioFlorIndexZeroDireita:
   jal checarColisaoTirosParedesCenarioFlor
-  bne $3, $0, desfazerTiroCenarioFlorIndexZero # se o retorno da checagem de colisao diferente de 0 bateu em uma parede invisivel
+  bne $3, $0, acertouBossFlorAtqNormal # se o retorno da checagem de colisao diferente de 0 bateu em uma parede invisivel
   
   # Refaz o fundo onde estava o tiro
   lw $4, 0($10) # pega a posicao do tiro
@@ -135,6 +135,10 @@ primeiroIterAtacarCenarioFlorIndexZeroOlhandoDireita:
   sw $11, 0($10)
   j continueAtacarCenarioFlorIndexZero
   
+  
+acertouBossFlorAtqNormal:
+  jal reduzirVidaFlor
+  j desfazerTiroCenarioFlorIndexZero
   
 desfazerTiroCenarioFlorIndexZero:
   jal refazerFundoTiroNormalCenarioFlor

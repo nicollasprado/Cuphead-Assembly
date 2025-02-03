@@ -24,6 +24,9 @@ Endereços da flor:
 65588 = Contador pro segura missel soltar o missel
 65592 = Endereço que esta o segura missel
 
+65596 = Vida da flor
+65600 = Vida inicial da flor
+
 
 Tela inicial:
 $16 = Armazenamento de valores ascii

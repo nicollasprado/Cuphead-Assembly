@@ -1,5 +1,5 @@
 .text
-.globl main, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor
+.globl main, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor, faseSereia
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -37,63 +37,79 @@ main:
   addi $12, $12, 65540
   
   # Dano
-  addi $13, $0, 3
+  addi $13, $0, 3 # 65540
   sw $13, 0($12)
   
   # Velocidade
-  addi $12, $12, 4
-  addi $13, $0, 3 # velocidade
+  addi $12, $12, 4 # 65544
+  addi $13, $0, 3  # velocidade
   sw $13, 0($12)
   
   # Direçao que esta olhando
-  addi $12, $12, 4
-  sw $0, 0($12) # 0, direita
+  addi $12, $12, 4 # 65548
+  sw $0, 0($12)    # 0, direita
   
   # Estado de pulo do jogador
-  addi $12, $12, 4
-  addi $13, $0, 1 # nao esta pulando
+  addi $12, $12, 4 # 65552
+  addi $13, $0, 1  # nao esta pulando
   sw $13, 0($12)
   
   # Contador da altura do pulo
-  addi $12, $12, 4
+  addi $12, $12, 4 # 65556
   sw $0, 0($12)
   
   # Canto superior esquerdo do tiro do jogador
-  addi $12, $12, 4
+  addi $12, $12, 4 # 65560
   sw $0, 0($12)
   
   # Direçao do tiro do jogador
-  addi $12, $12, 4
-  sw $0, 0($12) # comeca com 0 = pra direita
+  addi $12, $12, 4 # 65564
+  sw $0, 0($12)    # comeca com 0 = pra direita
   
   # Vida do jogador
-  addi $12, $12, 4
-  addi $13, $0, 3 # começa com 3
+  addi $12, $12, 4 # 65568
+  addi $13, $0, 3  # começa com 3
   sw $13, 0($12)
   
   # Cooldown do ataque de pinha da flor
-  addi $12, $12, 4
+  addi $12, $12, 4  # 65572
   addi $13, $0, -10 # cooldown inicial de -10
   sw $13, 0($12)
   
   # Endereço que esta o ataque de pinha
-  addi $12, $12, 4
+  addi $12, $12, 4 # 65576
   sw $0, 0($12)
   
   # Cooldown do ataque missel da flor
-  addi $12, $12, 4
+  addi $12, $12, 4  # 65580
   addi $13, $0, -20 # cooldown inicial de -10
   sw $13, 0($12)
   
   # Endereço que esta o ataque missel
-  addi $12, $12, 4
+  addi $12, $12, 4 # 65584
   addi $13, $0, -1
   sw $13, 0($12)
   
   # Cooldown pra o segura missel soltar o missel
-  addi $12, $12, 4
+  addi $12, $12, 4 # 65588
   sw $0, 0($12)
   
+  # Endere�o inicial do segura missel
+  addi $12, $12, 4 # 65592
+  sw $0, 0($12)
+  
+  # Vida da flor
+  addi $12, $12, 4 # 65596
+  addi $13, $0, 50
+  sw $13, 0($12)
+  
+  # Vida inicial da flor
+  addi $12, $12, 4 # 65600
+  sw $13, 0($12)   # $13 vem da parte de cima ja pra ficar a msm qtd de vida
+  
+  
+  # Criar barra de hp do boss
+  jal criarBarraHpFlor
   
   # movimentaçao do personagem
   addi $24, $0, 15360 # $24 => canto superior esquerdo do player
@@ -223,7 +239,7 @@ timer:
   addi $sp, $sp, -4
   
   # velocidade dos ticks do jogo
-  addi $20, $0, 5000
+  addi $20, $0, 2500 #5000
   
 forT:  
   beq $20, $0, fimT

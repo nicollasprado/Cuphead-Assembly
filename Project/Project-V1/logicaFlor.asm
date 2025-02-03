@@ -1,5 +1,5 @@
 .text
-.globl logicaFlor
+.globl logicaFlor, reduzirVidaFlor
 
 # Reg utilizados: $8, $9, $10, $11, $13
 logicaFlor:
@@ -339,3 +339,49 @@ retornoLogicaFlor:
   addi $sp, $sp, 4
   lw $8, 0($sp)
   j continueAtaqueFlor
+  
+  
+  
+  
+  
+  
+  
+#########################################
+# Funçao para reduzir a vida do boss
+# Reg utilizados: $8, $9
+
+reduzirVidaFlor:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $8, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $9, 0($sp)
+  addi $sp, $sp, -4
+  
+  
+  lui $8, 0x1001
+  addi $8, $8, 65596
+  lw $9, 0($8) # endereço da vida do boss
+  
+  addi $9, $9, -1 
+  # checa se o boss morreu
+  ble $9, $0, derrotouBossFlor
+  
+  sw $9, 0($8)
+  j retornoReduzirVidaFlor
+  
+derrotouBossFlor:
+  j faseSereia # TODO - implementar tela de derrota do boss 
+  
+retornoReduzirVidaFlor:
+  addi $sp, $sp, 4
+  lw $9, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $8, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
