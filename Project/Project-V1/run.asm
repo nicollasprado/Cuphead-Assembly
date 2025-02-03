@@ -1,5 +1,5 @@
 .text
-.globl main, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor, faseSereia
+.globl main, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor, faseSereia, transicaoFlorSereia
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -94,7 +94,7 @@ main:
   addi $12, $12, 4 # 65588
   sw $0, 0($12)
   
-  # Endere�o inicial do segura missel
+  # Endere�o inicial do segura missel
   addi $12, $12, 4 # 65592
   sw $0, 0($12)
   
@@ -212,6 +212,45 @@ continueBuild:
       
 faseSereia:
   jal cenarioSereia
+  # desenhar copia
+  addi $4, $0, 32768 # um endereço abaixo do primeiro bloco da ultima linha
+  jal cenarioSereia
+  
+  # desenhar o boss
+  addi $4, $0, 8604
+  jal criarSereia
+  
+  j continueBuild
+  
+
+transicaoFlorSereia:
+  # reset dos registradores
+  add $3, $0, $0
+  add $4, $0, $0
+  add $5, $0, $0
+  add $8, $0, $0
+  add $9, $0, $0
+  add $10, $0, $0
+  add $11, $0, $0
+  add $12, $0, $0
+  add $13, $0, $0
+  add $14, $0, $0
+  add $15, $0, $0
+  add $16, $0, $0
+  add $17, $0, $0
+  add $18, $0, $0
+  add $19, $0, $0
+  add $20, $0, $0
+  add $21, $0, $0
+  add $22, $0, $0
+  add $23, $0, $0
+  add $24, $0, $0
+  add $25, $0, $0
+
+  
+
+  jal cenarioSereia
+  # desenhar copia
   addi $4, $0, 32768 # um endereço abaixo do primeiro bloco da ultima linha
   jal cenarioSereia
   
@@ -239,7 +278,7 @@ timer:
   addi $sp, $sp, -4
   
   # velocidade dos ticks do jogo
-  addi $20, $0, 2500 #5000
+  addi $20, $0, 5000
   
 forT:  
   beq $20, $0, fimT

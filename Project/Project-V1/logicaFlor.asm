@@ -347,7 +347,7 @@ retornoLogicaFlor:
   
   
 #########################################
-# Funçao para reduzir a vida do boss
+# Funï¿½ao para reduzir a vida do boss
 # Reg utilizados: $8, $9
 
 reduzirVidaFlor:
@@ -363,7 +363,7 @@ reduzirVidaFlor:
   
   lui $8, 0x1001
   addi $8, $8, 65596
-  lw $9, 0($8) # endereço da vida do boss
+  lw $9, 0($8) # endereï¿½o da vida do boss
   
   addi $9, $9, -1 
   # checa se o boss morreu
@@ -373,7 +373,7 @@ reduzirVidaFlor:
   j retornoReduzirVidaFlor
   
 derrotouBossFlor:
-  j faseSereia # TODO - implementar tela de derrota do boss 
+  j transicaoFlorSereia # TODO - implementar tela de derrota do boss 
   
 retornoReduzirVidaFlor:
   addi $sp, $sp, 4
