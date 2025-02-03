@@ -1,5 +1,10 @@
 .text
+# cenario flor
 .globl main, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor, faseSereia, transicaoFlorSereia
+# cenario sereia
+.globl continueMovCenarioSereia
+
+
 main: 
   jal telaInicial
   #beq $3, $0, outroBotaoTelaInicial falta implementar o botao de baixo
@@ -206,23 +211,6 @@ continueAtaqueFlor:
       
       
       
-continueBuild:
-  jal criarIndicadorHP
-  j end
-      
-faseSereia:
-  jal cenarioSereia
-  # desenhar copia
-  addi $4, $0, 32768 # um endereço abaixo do primeiro bloco da ultima linha
-  jal cenarioSereia
-  
-  # desenhar o boss
-  addi $4, $0, 8604
-  jal criarSereia
-  
-  j continueBuild
-  
-
 transicaoFlorSereia:
   # reset dos registradores
   add $3, $0, $0
@@ -246,9 +234,11 @@ transicaoFlorSereia:
   add $23, $0, $0
   add $24, $0, $0
   add $25, $0, $0
+  j faseSereia
 
-  
-
+      
+      
+faseSereia:
   jal cenarioSereia
   # desenhar copia
   addi $4, $0, 32768 # um endereço abaixo do primeiro bloco da ultima linha
@@ -257,14 +247,112 @@ transicaoFlorSereia:
   # desenhar o boss
   addi $4, $0, 8604
   jal criarSereia
+  # desenhar cuphead aviao
+  addi $4, $0, 10240
+  jal criarCupheadAviao
+  addi $24, $0, 10240 # salva a posiçao inicial no reg 24 que sempre tera o canto superior esquerdo personagem
   
-  j continueBuild
-
-
-
-end:
-  addi $2, $0, 10
-  syscall
+  # Desenhar indicador de hp do cuphead
+  jal criarIndicadorHP
+  
+  
+  #----------------------------------------------#
+#  Definiçao de variaveis iniciais na memoria  #
+  lui $12, 0x1001
+  addi $12, $12, 65540
+  
+  # Dano
+  addi $13, $0, 3 # 65540
+  sw $13, 0($12)
+  
+  # Velocidade
+  addi $12, $12, 4 # 65544
+  addi $13, $0, 3  # velocidade
+  sw $13, 0($12)
+  
+  # Canto superior esquerdo do tiro do jogador
+  addi $12, $12, 16 # 65560
+  sw $0, 0($12)
+  
+  # Vida do jogador
+  addi $12, $12, 8 # 65568
+  addi $13, $0, 3  # começa com 3
+  sw $13, 0($12)
+  
+  # Vamos reutilizar esses endereços de memoria para o cenario da sereia
+  
+  # Cooldown do ataque de pinha da flor
+  #addi $12, $12, 4  # 65572
+  #addi $13, $0, -10 # cooldown inicial de -10
+  #sw $13, 0($12)
+  
+  # Endereço que esta o ataque de pinha
+  #addi $12, $12, 4 # 65576
+  #sw $0, 0($12)
+  
+  # Cooldown do ataque missel da flor
+  #addi $12, $12, 4  # 65580
+  #addi $13, $0, -20 # cooldown inicial de -10
+  #sw $13, 0($12)
+  
+  # Endereço que esta o ataque missel
+  #addi $12, $12, 4 # 65584
+  #addi $13, $0, -1
+  #sw $13, 0($12)
+  
+  # Cooldown pra o segura missel soltar o missel
+  #addi $12, $12, 4 # 65588
+  #sw $0, 0($12)
+  
+  # Endere�o inicial do segura missel
+  #addi $12, $12, 4 # 65592
+  #sw $0, 0($12)
+  
+  # Vida da flor
+  #addi $12, $12, 4 # 65596
+  #addi $13, $0, 50
+  #sw $13, 0($12)
+  
+  # Vida inicial da flor
+  #addi $12, $12, 4 # 65600
+  #sw $13, 0($12)   # $13 vem da parte de cima ja pra ficar a msm qtd de vida
+  
+  
+loopPrincipalCenarioSereia:
+  
+movimentacaoCenarioSereia:
+  lui $12, 0xffff  # Armazena o endereco de memoria que armazena 1 se tiver alguma entrada do teclado e 0 se nao
+  lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
+  beq $13, $0, loopPrincipalCenarioSereia
+  
+  lw $13, 4($12) # Armazena no $12 a tecla pressionada
+  
+  addi $15, $0, 65 # A ascii
+  beq $13, $15, andarEsquerdaCenarioSereia
+  addi $15, $0, 97 # a ascii
+  beq $13, $15, andarEsquerdaCenarioSereia
+  
+  addi $15, $0, 68 # D ascii
+  beq $13, $15, andarDireitaCenarioSereia
+  addi $15, $0, 100 # d ascii
+  beq $13, $15, andarDireitaCenarioSereia
+  
+  addi $15, $0, 83 # S ascii
+  beq $13, $15, andarBaixoCenarioSereia
+  addi $15, $0, 115 # s ascii
+  beq $13, $15, andarBaixoCenarioSereia
+  
+  addi $15, $0, 87 # W ascii
+  beq $13, $15, andarCimaCenarioSereia
+  addi $15, $0, 119 # w ascii
+  beq $13, $15, andarCimaCenarioSereia
+  
+  j loopPrincipalCenarioSereia
+  
+  
+continueMovCenarioSereia:
+  jal timer
+  j loopPrincipalCenarioSereia
   
   
 ######################
