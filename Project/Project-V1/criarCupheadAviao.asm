@@ -327,10 +327,11 @@ desfazerCupheadAviao:
   
   # endereço na copia
   lui $15, 0x1001
+  add $15, $15, $4
   addi $15, $15, 32768
   
   # qtd de linhas cuphead aviao
-  addi $10, $0, 16
+  addi $10, $0, 15
   addi $11, $0, 0
   # tamanho da linha do cuphead aviao
   addi $13, $0, 21

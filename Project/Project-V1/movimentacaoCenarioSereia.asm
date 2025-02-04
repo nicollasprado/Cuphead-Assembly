@@ -23,17 +23,15 @@ andarEsquerdaCenarioSereia:
   addi $10, $0, -1
   mul $9, $9, $10 # negativa pq e pra esquerda
   
+  addi $5, $0, 1 # indo pra esquerda
+  jal checarColisaoCupheadAviaoBordas
+  bne $3, $0, retornoAndarEsquerdaCenarioSereia
+
   jal desfazerCupheadAviao
   
-  # nova posicao
-  add $4, $24, $9
-  
-  # addi $5, $0, 1 # indo pra esquerda
-  # jal checarColisaoCupheadAviaoBordas
-  # bne $3, $0, retornoAndarEsquerdaCenarioSereia
-  
   # atualiza a posicao
-  add $24, $0, $4
+  add $24, $4, $9
+  add $4, $0, $24
   jal criarCupheadAviao
   
   j retornoAndarEsquerdaCenarioSereia
@@ -75,17 +73,15 @@ andarDireitaCenarioSereia:
   addi $10, $0, 4
   mul $9, $9, $10 # velocidade x 4 = pixels que o personagem ira andar
   
+  addi $5, $0, 0 # indo pra direita
+  jal checarColisaoCupheadAviaoBordas
+  bne $3, $0, retornoAndarDireitaCenarioSereia
+
   jal desfazerCupheadAviao
   
-  # nova posicao
-  add $4, $24, $9
-  
-  # addi $5, $0, 0 # indo pra direita
-  # jal checarColisaoCupheadAviaoBordas
-  # bne $3, $0, retornoAndarDireitaCenarioSereia
-  
   # atualiza a posicao
-  add $24, $0, $4
+  add $24, $4, $9
+  add $4, $0, $24
   jal criarCupheadAviao
   
   j retornoAndarDireitaCenarioSereia
@@ -128,9 +124,6 @@ andarCimaCenarioSereia:
   addi $10, $0, -512
   mul $9, $9, $10 # velocidade x -512 = pixels que o personagem ira andar
   
-  # nova posicao
-  add $4, $24, $9
-  
   addi $5, $0, 3 # indo pra cima
   jal checarColisaoCupheadAviaoBordas
   bne $3, $0, retornoAndarCimaCenarioSereia
@@ -138,7 +131,8 @@ andarCimaCenarioSereia:
   jal desfazerCupheadAviao
   
   # atualiza a posicao
-  add $24, $0, $4
+  add $24, $24, $9
+  add $4, $0, $24
   jal criarCupheadAviao
   
   j retornoAndarCimaCenarioSereia
@@ -182,17 +176,15 @@ andarBaixoCenarioSereia:
   addi $10, $0, 512
   mul $9, $9, $10 # velocidade x 512 = pixels que o personagem ira andar
   
-  # nova posicao
-  add $4, $24, $9
-  
-  #addi $5, $0, 3 # indo pra cima
-  #jal checarColisaoCupheadAviaoBordas
-  #bne $3, $0, retornoAndarBaixoCenarioSereia
-  
+  addi $5, $0, 2 # indo pra baixo
+  jal checarColisaoCupheadAviaoBordas
+  bne $3, $0, retornoAndarBaixoCenarioSereia
+
   jal desfazerCupheadAviao
   
   # atualiza a posicao
-  add $24, $0, $4
+  add $24, $24, $9
+  add $4, $0, $24
   jal criarCupheadAviao
   
   j retornoAndarBaixoCenarioSereia

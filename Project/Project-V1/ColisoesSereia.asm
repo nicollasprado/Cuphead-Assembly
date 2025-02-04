@@ -33,22 +33,67 @@ checarColisaoCupheadAviaoBordas:
   addi $3, $0, 0 # so pra garantir que o $3 começa com 0
   
   # checa se esta indo pra direita
-  #beq $5, $0, checarColisaoCupheadAviaoDireita
+  beq $5, $0, checarColisaoCupheadAviaoDireita
   # checa se esta indo pra esquerda
-  #addi $8, $0, 1
-  #beq $5, $8, checarColisaoCupheadAviaoEsquerda
+  addi $8, $0, 1
+  beq $5, $8, checarColisaoCupheadAviaoEsquerda
   # checa se esta indo pra baixo
-  #addi $8, $0, 2
-  #beq $5, $8, checarColisaoCupheadAviaoBaixo
+  addi $8, $0, 2
+  beq $5, $8, checarColisaoCupheadAviaoBaixo
   
   
   # Continuando aqui sera checagem pra cima
-  # Se a posicao do canto superior esquerdo do personagem for menor que 76 (canto superior direito do teto antes da sereia)
-  addi $8, $0, 76
-  blt $4, $8, colisaoDetectadaCupheadAviaoBordas
+  # Se a posicao do canto superior esquerdo do personagem for menor que 412 (canto superior direito do teto antes da sereia)
+  addi $8, $0, 412
+  addi $9, $4, -1024
+  
+  blt $9, $8, colisaoDetectadaCupheadAviaoBordas
 
   j retornoChecarColisaoCupheadAviaoBordas
   
+
+checarColisaoCupheadAviaoDireita:
+  # vai pro canto superior direito do personagem
+  addi $15, $4, 84
+
+  addi $8, $0, 408
+  
+  # altura da parede invisivel
+  addi $10, $0, 64
+  addi $11, $0, 0
+forChecarColisaoCupheadAviaoDireita:
+  beq $10, $11, retornoChecarColisaoCupheadAviaoBordas
+  
+  beq $8, $15, colisaoDetectadaCupheadAviaoBordas
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forChecarColisaoCupheadAviaoDireita
+  
+  
+checarColisaoCupheadAviaoEsquerda:
+  addi $8, $0, 0 # para garantir que começara com zero
+  
+  # altura da parede invisivel
+  addi $10, $0, 64
+  addi $11, $0, 0
+forChecarColisaoCupheadAviaoEsquerda:
+  beq $10, $11, retornoChecarColisaoCupheadAviaoBordas
+  
+  beq $8, $4, colisaoDetectadaCupheadAviaoBordas
+  addi $8, $8, 512
+  
+  addi $11, $11, 1
+  j forChecarColisaoCupheadAviaoEsquerda
+  
+  
+checarColisaoCupheadAviaoBaixo:
+  addi $8, $0, 26624 # topo do mar
+  addi $9, $4, 8704  # um pixel abaixo do aviao
+  
+  bge $9, $8, colisaoDetectadaCupheadAviaoBordas
+  
+  j retornoChecarColisaoCupheadAviaoBordas
   
   
   
