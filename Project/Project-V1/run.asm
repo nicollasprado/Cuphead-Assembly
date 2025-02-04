@@ -113,8 +113,7 @@ main:
   sw $13, 0($12)   # $13 vem da parte de cima ja pra ficar a msm qtd de vida
   
   
-  # Criar barra de hp do boss
-  jal criarBarraHpFlor
+  jal criarBarraHpBoss
   
   # movimentaçao do personagem
   addi $24, $0, 15360 # $24 => canto superior esquerdo do player
@@ -304,18 +303,20 @@ faseSereia:
   #addi $12, $12, 4 # 65588
   #sw $0, 0($12)
   
-  # Endere�o inicial do segura missel
+  # Endereco inicial do segura missel
   #addi $12, $12, 4 # 65592
   #sw $0, 0($12)
   
-  # Vida da flor
-  #addi $12, $12, 4 # 65596
-  #addi $13, $0, 50
-  #sw $13, 0($12)
+  # Vida da sereia
+  addi $12, $12, 28 # 65596
+  addi $13, $0, 50
+  sw $13, 0($12)
   
-  # Vida inicial da flor
-  #addi $12, $12, 4 # 65600
-  #sw $13, 0($12)   # $13 vem da parte de cima ja pra ficar a msm qtd de vida
+  # Vida inicial da sereia
+  addi $12, $12, 4 # 65600
+  sw $13, 0($12)   # $13 vem da parte de cima ja pra ficar a msm qtd de vida
+  
+  jal criarBarraHpBoss
   
   
 loopPrincipalCenarioSereia:

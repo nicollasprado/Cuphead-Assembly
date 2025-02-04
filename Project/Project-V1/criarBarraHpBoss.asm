@@ -1,9 +1,9 @@
 .text
-.globl criarBarraHpFlor, danoBarraHpFlor
+.globl criarBarraHpBoss, danoBarraHpBoss
 
 # $4 -> Canto superior esquerdo da barra de vida
 # Reg utilizados: $8, $9, $10, $11, $13
-criarBarraHpFlor:
+criarBarraHpBoss:
   sw $31, 0($sp)
   addi $sp, $sp, -4
   
@@ -109,7 +109,7 @@ retornoCriarBarraHpFlor:
 # Funçao para reduzir a vida da flor no display
 # Regs utilizados: $8, $9, $10, $11, $13
 
-danoBarraHpFlor:
+danoBarraHpBoss:
   sw $31, 0($sp)
   addi $sp, $sp, -4
   

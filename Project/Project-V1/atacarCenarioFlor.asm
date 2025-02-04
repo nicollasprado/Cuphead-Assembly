@@ -138,7 +138,7 @@ primeiroIterAtacarCenarioFlorIndexZeroOlhandoDireita:
   
 acertouBossFlorAtqNormal:
   jal reduzirVidaFlor
-  jal danoBarraHpFlor
+  jal danoBarraHpBoss
   j desfazerTiroCenarioFlorIndexZero
   
 desfazerTiroCenarioFlorIndexZero:
