@@ -1,5 +1,5 @@
 .text
-.globl checarColisaoCupheadAviaoBordas
+.globl checarColisaoCupheadAviaoBordas, checarColisaoFantasmaCuphead
 
 # $4 -> canto superior esquerdo do cuphead aviao
 # $5 -> direçao que o jogador esta indo, 0 = direita, 1 = esquerda, 2 = baixo, 3 = cima
@@ -122,6 +122,58 @@ retornoChecarColisaoCupheadAviaoBordas:
   
   addi $sp, $sp, 4
   lw $8, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $31, 0($sp)
+  jr $31
+  
+  
+  
+  
+#####################
+# funçao para checar as colisoes dos ataques de fantasma da sereia com o cuphead
+# $4 => canto superior esquerdo do ataque
+# $5 => canto superior esquerdo do cuphead
+# Retorno: $3 => 0 = encostou no cuphead, 1 = nao encostou
+# Registradores usados: $10, $11
+
+checarColisaoFantasmaCuphead:
+  sw $31, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $10, 0($sp)
+  addi $sp, $sp, -4
+  
+  sw $11, 0($sp)
+  addi $sp, $sp, -4
+  
+  
+  addi $3, $0, 1 # começa negado
+  
+  addi $5, $5, 80 # ajuste pra pegar o canto superior direito do cuphead
+  
+  # tamanho do cuphead
+  addi $10, $0, 16
+  addi $11, $0, 0
+forChecarColisaoFantasmaSereia:
+  beq $10, $11, retornoChecarColisaoFantasmaSereia
+  
+  beq $4, $5, colisaoDetectadaFantasmaSereia
+  addi $5, $5, 512
+  
+  addi $11, $11, 1
+  j forChecarColisaoFantasmaSereia
+  
+colisaoDetectadaFantasmaSereia:
+  add $3, $0, $0
+  j retornoChecarColisaoFantasmaSereia
+  
+retornoChecarColisaoFantasmaSereia:
+  addi $sp, $sp, 4
+  lw $11, 0($sp)
+  
+  addi $sp, $sp, 4
+  lw $10, 0($sp)
   
   addi $sp, $sp, 4
   lw $31, 0($sp)

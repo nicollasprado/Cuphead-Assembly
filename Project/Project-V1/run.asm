@@ -2,7 +2,7 @@
 # cenario flor
 .globl main, continueMovCenarioFlor, posMovHorizontalFlor, continueAtaqueNormalCenarioFlor, continueAtaqueFlor, faseSereia, transicaoFlorSereia
 # cenario sereia
-.globl continueMovCenarioSereia
+.globl continueMovCenarioSereia, continueAtaqueCenarioSereia, continueAtaqueLogicaCenarioSereia
 
 
 main: 
@@ -246,6 +246,10 @@ faseSereia:
   # desenhar o boss
   addi $4, $0, 8604
   jal criarSereia
+  # desenhar o boss na copia
+  addi $4, $0, 8604
+  addi $4, $4, 32768
+  jal criarSereia
   # desenhar cuphead aviao
   addi $4, $0, 10240
   jal criarCupheadAviao
@@ -261,7 +265,7 @@ faseSereia:
   addi $12, $12, 65540
   
   # Dano
-  addi $13, $0, 3 # 65540
+  addi $13, $0, 10 # 65540
   sw $13, 0($12)
   
   # Velocidade
@@ -273,21 +277,26 @@ faseSereia:
   addi $12, $12, 16 # 65560
   sw $0, 0($12)
   
+  # Direçao do tiro do cuphead
+  addi $12, $12, 4 # 65564
+  addi $13, $0, 1  # pra direita
+  sw $13, 0($12)
+  
   # Vida do jogador
-  addi $12, $12, 8 # 65568
+  addi $12, $12, 4 # 65568
   addi $13, $0, 3  # começa com 3
   sw $13, 0($12)
   
   # Vamos reutilizar esses endereços de memoria para o cenario da sereia
   
-  # Cooldown do ataque de pinha da flor
-  #addi $12, $12, 4  # 65572
-  #addi $13, $0, -10 # cooldown inicial de -10
-  #sw $13, 0($12)
+  # Cooldown do ataque do fantasma sereia
+  addi $12, $12, 4  # 65572
+  addi $13, $0, -10 # cooldown inicial de -10
+  sw $13, 0($12)
   
-  # Endereço que esta o ataque de pinha
-  #addi $12, $12, 4 # 65576
-  #sw $0, 0($12)
+  # Endereço que esta o ataque do fantasma
+  addi $12, $12, 4 # 65576
+  sw $0, 0($12)
   
   # Cooldown do ataque missel da flor
   #addi $12, $12, 4  # 65580
@@ -308,7 +317,7 @@ faseSereia:
   #sw $0, 0($12)
   
   # Vida da sereia
-  addi $12, $12, 28 # 65596
+  addi $12, $12, 20 # 65596
   addi $13, $0, 50
   sw $13, 0($12)
   
@@ -324,7 +333,7 @@ loopPrincipalCenarioSereia:
 movimentacaoCenarioSereia:
   lui $12, 0xffff  # Armazena o endereco de memoria que armazena 1 se tiver alguma entrada do teclado e 0 se nao
   lw $13, 0($12) # armazena no $13 o que esta no endereço de memoria apontado por $12
-  beq $13, $0, loopPrincipalCenarioSereia
+  beq $13, $0, posMoveCupheadCenarioSereia
   
   lw $13, 4($12) # Armazena no $12 a tecla pressionada
   
@@ -348,12 +357,29 @@ movimentacaoCenarioSereia:
   addi $15, $0, 119 # w ascii
   beq $13, $15, andarCimaCenarioSereia
   
+posMoveCupheadCenarioSereia:
+  # ataque normal
+  add $4, $0, $24
+  j atacarCenarioSereia
+posAtaqueCenarioSereia:
+  j logicaSereia
+posAtaqueLogicaCenarioSereia:
+  
   j loopPrincipalCenarioSereia
+  
   
   
 continueMovCenarioSereia:
   jal timer
-  j loopPrincipalCenarioSereia
+  j posMoveCupheadCenarioSereia
+  
+continueAtaqueCenarioSereia:
+  jal timer
+  j posAtaqueCenarioSereia
+  
+continueAtaqueLogicaCenarioSereia:
+  jal timer
+  j posAtaqueLogicaCenarioSereia
   
   
 ######################

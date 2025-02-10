@@ -1,5 +1,5 @@
 .text
-.globl atacarCenarioFlor
+.globl atacarCenarioFlor, refazerFundoTiroNormalCenarioFlor
 
 ###################################################
 # funcao para os tiros ficarem saindo do personagem
