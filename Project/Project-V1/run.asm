@@ -318,7 +318,7 @@ faseSereia:
   
   # Vida da sereia
   addi $12, $12, 20 # 65596
-  addi $13, $0, 50
+  addi $13, $0, 50  # vida
   sw $13, 0($12)
   
   # Vida inicial da sereia

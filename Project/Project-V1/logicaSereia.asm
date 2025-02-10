@@ -162,7 +162,11 @@ reduzirVidaSereia:
   addi $8, $8, 65596
   lw $9, 0($8) # endere�o da vida do boss
   
-  addi $9, $9, -1 
+  # pega o dano do jogador
+  #addi $8, $8, -56
+  #lw $10, 0($8)
+  
+  addi $9, $9, -1
   # checa se o boss morreu
   ble $9, $0, derrotouBossSereia
   
