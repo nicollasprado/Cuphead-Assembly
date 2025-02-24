@@ -174,7 +174,7 @@ reduzirVidaSereia:
   j retornoReduzirVidaSereia
   
 derrotouBossSereia:
-  j main # TODO - implementar tela de derrota do boss 
+  jal telaYouWin
   
 retornoReduzirVidaSereia:
   addi $sp, $sp, 4

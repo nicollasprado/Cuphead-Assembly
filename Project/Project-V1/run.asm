@@ -105,7 +105,7 @@ main:
   
   # Vida da flor
   addi $12, $12, 4 # 65596
-  addi $13, $0, 50
+  addi $13, $0, 10
   sw $13, 0($12)
   
   # Vida inicial da flor
@@ -318,7 +318,7 @@ faseSereia:
   
   # Vida da sereia
   addi $12, $12, 20 # 65596
-  addi $13, $0, 50  # vida
+  addi $13, $0, 10  # vida
   sw $13, 0($12)
   
   # Vida inicial da sereia
@@ -326,6 +326,9 @@ faseSereia:
   sw $13, 0($12)   # $13 vem da parte de cima ja pra ficar a msm qtd de vida
   
   jal criarBarraHpBoss
+  
+  # Timer inicial para nao começar de uma hora pra outra
+  jal timerYouWin
   
   
 loopPrincipalCenarioSereia:
@@ -403,35 +406,6 @@ forT:
   j forT    
                 
 fimT:  
-  addi $sp, $sp, 4                                                    
-  lw $20, 0($sp)
-
-  addi $sp, $sp, 4                                                    
-  lw $31, 0($sp)          
-  jr $31
-  
-
-######################
-# função Timer
-
-timerAtaque: 
-  sw $31, 0($sp)
-  addi $sp, $sp, -4
-       
-  sw $20, 0($sp)
-  addi $sp, $sp, -4
-  
-  # velocidade dos ticks do jogo
-  addi $20, $0, 10000
-  
-forTA:  
-  beq $20, $0, fimT
-  nop
-  nop
-  addi $20, $20, -1      
-  j forTA  
-                
-fimTA:  
   addi $sp, $sp, 4                                                    
   lw $20, 0($sp)
 
