@@ -105,7 +105,7 @@ main:
   
   # Vida da flor
   addi $12, $12, 4 # 65596
-  addi $13, $0, 10
+  addi $13, $0, 20
   sw $13, 0($12)
   
   # Vida inicial da flor
@@ -318,7 +318,7 @@ faseSereia:
   
   # Vida da sereia
   addi $12, $12, 20 # 65596
-  addi $13, $0, 10  # vida
+  addi $13, $0, 20  # vida
   sw $13, 0($12)
   
   # Vida inicial da sereia
